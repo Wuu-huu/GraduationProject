@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.videomodule.mapper.TagStatMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.videomodule.entity.TagStat">
+            <id property="tagId" column="tag_id" />
+            <result property="useCount" column="use_count" />
+            <result property="hotScore" column="hot_score" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        tag_id,use_count,hot_score,update_time
+    </sql>
+</mapper>

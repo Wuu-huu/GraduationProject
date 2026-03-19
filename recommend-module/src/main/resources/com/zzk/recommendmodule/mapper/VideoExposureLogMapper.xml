@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.VideoExposureLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.VideoExposureLog">
+            <id property="exposureId" column="exposure_id" />
+            <result property="requestId" column="request_id" />
+            <result property="uid" column="uid" />
+            <result property="vid" column="vid" />
+            <result property="scene" column="scene" />
+            <result property="positionNo" column="position_no" />
+            <result property="recallSource" column="recall_source" />
+            <result property="score" column="score" />
+            <result property="isClicked" column="is_clicked" />
+            <result property="isPlayed" column="is_played" />
+            <result property="exposeTime" column="expose_time" />
+            <result property="clickTime" column="click_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        exposure_id,request_id,uid,vid,scene,position_no,
+        recall_source,score,is_clicked,is_played,expose_time,
+        click_time
+    </sql>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.RecommendResultMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.RecommendResult">
+            <id property="id" column="id" />
+            <result property="requestId" column="request_id" />
+            <result property="uid" column="uid" />
+            <result property="vid" column="vid" />
+            <result property="positionNo" column="position_no" />
+            <result property="recallSource" column="recall_source" />
+            <result property="rankScore" column="rank_score" />
+            <result property="rerankScore" column="rerank_score" />
+            <result property="finalScore" column="final_score" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,request_id,uid,vid,position_no,recall_source,
+        rank_score,rerank_score,final_score,create_time
+    </sql>
+</mapper>

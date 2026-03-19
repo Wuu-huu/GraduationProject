@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.UserBehaviorEventMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.UserBehaviorEvent">
+            <id property="eventId" column="event_id" />
+            <result property="uid" column="uid" />
+            <result property="objType" column="obj_type" />
+            <result property="objId" column="obj_id" />
+            <result property="eventType" column="event_type" />
+            <result property="eventValue" column="event_value" />
+            <result property="scene" column="scene" />
+            <result property="pageFrom" column="page_from" />
+            <result property="deviceType" column="device_type" />
+            <result property="clientTime" column="client_time" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        event_id,uid,obj_type,obj_id,event_type,event_value,
+        scene,page_from,device_type,client_time,create_time
+    </sql>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.interactionmodule.mapper.CommentActionMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.interactionmodule.entity.CommentAction">
+            <id property="id" column="id" />
+            <result property="uid" column="uid" />
+            <result property="commentId" column="comment_id" />
+            <result property="actionType" column="action_type" />
+            <result property="actionTime" column="action_time" />
+            <result property="cancelFlag" column="cancel_flag" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,uid,comment_id,action_type,action_time,cancel_flag
+    </sql>
+</mapper>

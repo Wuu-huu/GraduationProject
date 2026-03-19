@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.authmoudule.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.authmoudule.UserInfo">
+            <id property="uid" column="uid" />
+            <result property="username" column="username" />
+            <result property="passwordHash" column="password_hash" />
+            <result property="email" column="email" />
+            <result property="phone" column="phone" />
+            <result property="state" column="state" />
+            <result property="role" column="role" />
+            <result property="registerTime" column="register_time" />
+            <result property="lastLoginTime" column="last_login_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,username,password_hash,email,phone,state,
+        role,register_time,last_login_time
+    </sql>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.VideoPlayLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.VideoPlayLog">
+            <id property="playId" column="play_id" />
+            <result property="uid" column="uid" />
+            <result property="vid" column="vid" />
+            <result property="partId" column="part_id" />
+            <result property="requestId" column="request_id" />
+            <result property="scene" column="scene" />
+            <result property="enterSource" column="enter_source" />
+            <result property="playStartTime" column="play_start_time" />
+            <result property="playEndTime" column="play_end_time" />
+            <result property="watchSec" column="watch_sec" />
+            <result property="progressSec" column="progress_sec" />
+            <result property="completionRate" column="completion_rate" />
+            <result property="isFinish" column="is_finish" />
+            <result property="isAutoplay" column="is_autoplay" />
+            <result property="deviceType" column="device_type" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        play_id,uid,vid,part_id,request_id,scene,
+        enter_source,play_start_time,play_end_time,watch_sec,progress_sec,
+        completion_rate,is_finish,is_autoplay,device_type
+    </sql>
+</mapper>

@@ -1,0 +1,13 @@
+package com.zzk.interactionmodule.service;
+
+import com.zzk.interactionmodule.entity.UserVideoState;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+/**
+* @author 周振坤
+* @description 针对表【user_video_state(用户视频状态聚合表)】的数据库操作Service
+* @createDate 2026-03-19 23:35:29
+*/
+public interface UserVideoStateService extends IService<UserVideoState> {
+
+}

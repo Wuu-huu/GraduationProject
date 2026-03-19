@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.videomodule.mapper.VideoMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.videomodule.entity.Video">
+            <id property="vid" column="vid" />
+            <result property="uid" column="uid" />
+            <result property="title" column="title" />
+            <result property="subtitle" column="subtitle" />
+            <result property="sourceType" column="source_type" />
+            <result property="copyrightType" column="copyright_type" />
+            <result property="coverUrl" column="cover_url" />
+            <result property="description" column="description" />
+            <result property="status" column="status" />
+            <result property="publishStatus" column="publish_status" />
+            <result property="visibility" column="visibility" />
+            <result property="durationSec" column="duration_sec" />
+            <result property="qualityScore" column="quality_score" />
+            <result property="publishTime" column="publish_time" />
+            <result property="uploadTime" column="upload_time" />
+            <result property="deleteTime" column="delete_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        vid,uid,title,subtitle,source_type,copyright_type,
+        cover_url,description,status,publish_status,visibility,
+        duration_sec,quality_score,publish_time,upload_time,delete_time
+    </sql>
+</mapper>

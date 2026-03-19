@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.UserInterestProfileMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.UserInterestProfile">
+            <id property="uid" column="uid" />
+            <result property="categoryWeights" column="category_weights" />
+            <result property="tagWeights" column="tag_weights" />
+            <result property="creatorWeights" column="creator_weights" />
+            <result property="activeHours" column="active_hours" />
+            <result property="freshnessPreference" column="freshness_preference" />
+            <result property="durationPreference" column="duration_preference" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,category_weights,tag_weights,creator_weights,active_hours,freshness_preference,
+        duration_preference,update_time
+    </sql>
+</mapper>

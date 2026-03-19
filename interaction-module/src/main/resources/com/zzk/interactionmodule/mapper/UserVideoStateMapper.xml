@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.interactionmodule.mapper.UserVideoStateMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.interactionmodule.entity.UserVideoState">
+            <id property="id" column="id" />
+            <result property="uid" column="uid" />
+            <result property="vid" column="vid" />
+            <result property="liked" column="liked" />
+            <result property="disliked" column="disliked" />
+            <result property="coinCount" column="coin_count" />
+            <result property="favorited" column="favorited" />
+            <result property="watchLater" column="watch_later" />
+            <result property="lastPlayTime" column="last_play_time" />
+            <result property="lastPlayProgressSec" column="last_play_progress_sec" />
+            <result property="totalWatchSec" column="total_watch_sec" />
+            <result property="playTimes" column="play_times" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,uid,vid,liked,disliked,coin_count,
+        favorited,watch_later,last_play_time,last_play_progress_sec,total_watch_sec,
+        play_times
+    </sql>
+</mapper>

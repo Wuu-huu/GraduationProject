@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.videomodule.mapper.VideoCategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.videomodule.entity.VideoCategory">
+            <id property="id" column="id" />
+            <result property="vid" column="vid" />
+            <result property="categoryId" column="category_id" />
+            <result property="isPrimary" column="is_primary" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,vid,category_id,is_primary
+    </sql>
+</mapper>

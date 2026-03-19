@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.usermodule.mapper.UserProfileMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.usermodule.entity.UserProfile">
+            <id property="uid" column="uid" />
+            <result property="nickname" column="nickname" />
+            <result property="avatarUrl" column="avatar_url" />
+            <result property="backgroundUrl" column="background_url" />
+            <result property="gender" column="gender" />
+            <result property="birthday" column="birthday" />
+            <result property="signature" column="signature" />
+            <result property="province" column="province" />
+            <result property="city" column="city" />
+            <result property="authType" column="auth_type" />
+            <result property="authDesc" column="auth_desc" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        uid,nickname,avatar_url,background_url,gender,birthday,
+        signature,province,city,auth_type,auth_desc,
+        update_time
+    </sql>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.auditmodule.mapper.AuditTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.auditmodule.entity.AuditTask">
+            <id property="auditId" column="audit_id" />
+            <result property="bizType" column="biz_type" />
+            <result property="bizId" column="biz_id" />
+            <result property="auditStatus" column="audit_status" />
+            <result property="reason" column="reason" />
+            <result property="auditorUid" column="auditor_uid" />
+            <result property="submitTime" column="submit_time" />
+            <result property="auditTime" column="audit_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        audit_id,biz_type,biz_id,audit_status,reason,auditor_uid,
+        submit_time,audit_time
+    </sql>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.RecommendRequestMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.RecommendRequest">
+            <id property="requestId" column="request_id" />
+            <result property="uid" column="uid" />
+            <result property="scene" column="scene" />
+            <result property="pageNo" column="page_no" />
+            <result property="deviceType" column="device_type" />
+            <result property="requestTime" column="request_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        request_id,uid,scene,page_no,device_type,request_time
+    </sql>
+</mapper>

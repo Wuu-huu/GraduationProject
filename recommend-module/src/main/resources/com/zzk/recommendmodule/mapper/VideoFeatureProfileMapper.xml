@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.VideoFeatureProfileMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.VideoFeatureProfile">
+            <id property="vid" column="vid" />
+            <result property="categoryId" column="category_id" />
+            <result property="tagVector" column="tag_vector" />
+            <result property="contentQualityScore" column="content_quality_score" />
+            <result property="ctrScore" column="ctr_score" />
+            <result property="cvrScore" column="cvr_score" />
+            <result property="watchScore" column="watch_score" />
+            <result property="authorWeight" column="author_weight" />
+            <result property="embeddingId" column="embedding_id" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        vid,category_id,tag_vector,content_quality_score,ctr_score,cvr_score,
+        watch_score,author_weight,embedding_id,update_time
+    </sql>
+</mapper>

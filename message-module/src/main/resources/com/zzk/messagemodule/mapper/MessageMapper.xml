@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.messagemodule.mapper.MessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.messagemodule.entity.Message">
+            <id property="messageId" column="message_id" />
+            <result property="conversationId" column="conversation_id" />
+            <result property="senderUid" column="sender_uid" />
+            <result property="receiverUid" column="receiver_uid" />
+            <result property="msgType" column="msg_type" />
+            <result property="content" column="content" />
+            <result property="isRecalled" column="is_recalled" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        message_id,conversation_id,sender_uid,receiver_uid,msg_type,content,
+        is_recalled,create_time
+    </sql>
+</mapper>

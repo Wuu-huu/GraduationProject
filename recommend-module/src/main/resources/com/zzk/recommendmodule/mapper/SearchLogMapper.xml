@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.recommendmodule.mapper.SearchLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.zzk.recommendmodule.entity.SearchLog">
+            <id property="id" column="id" />
+            <result property="uid" column="uid" />
+            <result property="keyword" column="keyword" />
+            <result property="searchScene" column="search_scene" />
+            <result property="resultCount" column="result_count" />
+            <result property="clickVid" column="click_vid" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,uid,keyword,search_scene,result_count,click_vid,
+        create_time
+    </sql>
+</mapper>
