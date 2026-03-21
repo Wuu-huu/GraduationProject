@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="favorite_folder")
 @Data
 public class FavoriteFolder {
+    @TableId(value = "fid", type = IdType.AUTO)
     private Long fid;
 
     private Long uid;

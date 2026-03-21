@@ -1,7 +1,9 @@
 package com.zzk.videomodule.service;
 
-import com.zzk.videomodule.entity.VideoSeries;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.videomodule.dto.SaveVideoSeriesRequest;
+import com.zzk.videomodule.entity.VideoSeries;
+import com.zzk.videomodule.vo.VideoSeriesVO;
 
 /**
 * @author 周振坤
@@ -10,4 +12,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface VideoSeriesService extends IService<VideoSeries> {
 
+    VideoSeriesVO createSeries(SaveVideoSeriesRequest request);
+
+    VideoSeriesVO updateSeries(Long seriesId, SaveVideoSeriesRequest request);
+
+    void deleteSeries(Long seriesId);
+
+    VideoSeriesVO getSeriesDetail(Long seriesId);
 }

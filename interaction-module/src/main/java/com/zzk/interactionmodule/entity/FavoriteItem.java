@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="favorite_item")
 @Data
 public class FavoriteItem {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long fid;

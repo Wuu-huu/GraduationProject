@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="video_series_item")
 @Data
 public class VideoSeriesItem {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long seriesId;

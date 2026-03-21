@@ -1,7 +1,11 @@
 package com.zzk.interactionmodule.service;
 
-import com.zzk.interactionmodule.entity.FavoriteFolder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.interactionmodule.dto.SaveFavoriteFolderRequest;
+import com.zzk.interactionmodule.entity.FavoriteFolder;
+import com.zzk.interactionmodule.vo.FavoriteFolderDetailVO;
+import com.zzk.interactionmodule.vo.FavoriteFolderVO;
+import java.util.List;
 
 /**
 * @author 周振坤
@@ -10,4 +14,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface FavoriteFolderService extends IService<FavoriteFolder> {
 
+    FavoriteFolderVO createFolder(SaveFavoriteFolderRequest request);
+
+    FavoriteFolderVO updateFolder(Long favoriteFolderId, SaveFavoriteFolderRequest request);
+
+    void deleteFolder(Long favoriteFolderId);
+
+    List<FavoriteFolderVO> listCurrentUserFolders();
+
+    FavoriteFolderDetailVO getFolderDetail(Long favoriteFolderId);
+
+    void addVideoToFolder(Long favoriteFolderId, Long videoId);
+
+    void removeVideoFromFolder(Long favoriteFolderId, Long videoId);
 }

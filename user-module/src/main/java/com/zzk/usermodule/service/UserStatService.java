@@ -15,4 +15,10 @@ public interface UserStatService extends IService<UserStat> {
     void increaseFansCount(Long uid, int delta);
 
     void increaseFollowingCount(Long uid, int delta);
+
+    void increaseVideoCount(Long uid, int delta);
+
+    void increaseLikeReceivedCount(Long uid, long delta);
+
+    void increasePlayReceivedCount(Long uid, long delta);
 }

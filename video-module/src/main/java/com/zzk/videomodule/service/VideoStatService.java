@@ -1,7 +1,8 @@
 package com.zzk.videomodule.service;
 
-import com.zzk.videomodule.entity.VideoStat;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.videomodule.entity.VideoStat;
+import com.zzk.videomodule.vo.VideoStatVO;
 
 /**
 * @author 周振坤
@@ -10,4 +11,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface VideoStatService extends IService<VideoStat> {
 
+    void initVideoStat(Long videoId);
+
+    VideoStatVO getVideoStat(Long videoId);
+
+    void adjustVideoStat(Long videoId,
+                         long likeDelta,
+                         long dislikeDelta,
+                         long coinDelta,
+                         long favoriteDelta,
+                         long commentDelta,
+                         long danmuDelta,
+                         long playDelta);
 }

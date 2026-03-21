@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="tag")
 @Data
 public class Tag {
+    @TableId(value = "tag_id", type = IdType.AUTO)
     private Long tagId;
 
     private String tagName;

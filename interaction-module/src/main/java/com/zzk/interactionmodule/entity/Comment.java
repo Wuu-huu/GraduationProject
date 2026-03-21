@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="comment")
 @Data
 public class Comment {
+    @TableId(value = "comment_id", type = IdType.AUTO)
     private Long commentId;
 
     private Long vid;

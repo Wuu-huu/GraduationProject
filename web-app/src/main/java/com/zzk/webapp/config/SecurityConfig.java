@@ -6,6 +6,7 @@ import com.zzk.common.security.RestAccessDeniedHandler;
 import com.zzk.common.security.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,6 +42,12 @@ public class SecurityConfig {
                     for (String path : SecurityConstants.DEFAULT_WHITE_LIST) {
                         registry.requestMatchers(path).permitAll();
                     }
+                    registry.requestMatchers(HttpMethod.GET, "/api/videos", "/api/videos/*", "/api/videos/*/stats",
+                                    "/api/videos/*/parts", "/api/videos/*/category-tags",
+                                    "/api/videos/*/comments", "/api/videos/*/danmakus",
+                                    "/api/videos/zone/*", "/api/video-series/*", "/api/video-series/*/videos",
+                                    "/api/users/*/videos")
+                            .permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

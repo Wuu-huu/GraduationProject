@@ -12,6 +12,7 @@ import lombok.Data;
 @TableName(value ="category")
 @Data
 public class Category {
+    @TableId(value = "category_id", type = IdType.AUTO)
     private Long categoryId;
 
     private Long parentId;

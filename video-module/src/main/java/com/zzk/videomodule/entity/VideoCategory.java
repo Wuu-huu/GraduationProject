@@ -12,6 +12,7 @@ import lombok.Data;
 @TableName(value ="video_category")
 @Data
 public class VideoCategory {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long vid;

@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="video_stat")
 @Data
 public class VideoStat {
+    @TableId("vid")
     private Long vid;
 
     private Long exposureCount;

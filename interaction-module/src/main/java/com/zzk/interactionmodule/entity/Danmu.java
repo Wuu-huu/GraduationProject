@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="danmu")
 @Data
 public class Danmu {
+    @TableId(value = "danmu_id", type = IdType.AUTO)
     private Long danmuId;
 
     private Long vid;

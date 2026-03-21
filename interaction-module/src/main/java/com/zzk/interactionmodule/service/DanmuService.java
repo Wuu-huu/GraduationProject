@@ -1,7 +1,10 @@
 package com.zzk.interactionmodule.service;
 
-import com.zzk.interactionmodule.entity.Danmu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.interactionmodule.dto.CreateDanmuRequest;
+import com.zzk.interactionmodule.entity.Danmu;
+import com.zzk.interactionmodule.vo.DanmuVO;
+import java.util.List;
 
 /**
 * @author 周振坤
@@ -10,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DanmuService extends IService<Danmu> {
 
+    DanmuVO createDanmu(CreateDanmuRequest request);
+
+    List<DanmuVO> listDanmuByVideo(Long videoId, Long partId);
 }

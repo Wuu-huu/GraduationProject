@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="video")
 @Data
 public class Video {
+    @TableId(value = "vid", type = IdType.AUTO)
     private Long vid;
 
     private Long uid;

@@ -51,6 +51,30 @@ public class UserStatServiceImpl extends ServiceImpl<UserStatMapper, UserStat>
         updateById(stat);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void increaseVideoCount(Long uid, int delta) {
+        UserStat stat = getOrCreate(uid);
+        stat.setVideoCount(Math.max(0, defaultInt(stat.getVideoCount()) + delta));
+        updateById(stat);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void increaseLikeReceivedCount(Long uid, long delta) {
+        UserStat stat = getOrCreate(uid);
+        stat.setLikeReceivedCount(Math.max(0L, defaultLong(stat.getLikeReceivedCount()) + delta));
+        updateById(stat);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void increasePlayReceivedCount(Long uid, long delta) {
+        UserStat stat = getOrCreate(uid);
+        stat.setPlayReceivedCount(Math.max(0L, defaultLong(stat.getPlayReceivedCount()) + delta));
+        updateById(stat);
+    }
+
     private UserStat getOrCreate(Long uid) {
         UserStat stat = getById(uid);
         if (stat != null) {
@@ -62,6 +86,10 @@ public class UserStatServiceImpl extends ServiceImpl<UserStatMapper, UserStat>
 
     private int defaultInt(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    private long defaultLong(Long value) {
+        return value == null ? 0L : value;
     }
 }
 
