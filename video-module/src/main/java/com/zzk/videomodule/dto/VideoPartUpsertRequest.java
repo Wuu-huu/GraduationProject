@@ -1,7 +1,7 @@
 package com.zzk.videomodule.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +17,7 @@ public class VideoPartUpsertRequest {
 
     @NotNull
     @Min(1)
+    @JsonAlias("sortNo")
     @Schema(description = "分P序号", example = "1")
     private Integer partNo;
 

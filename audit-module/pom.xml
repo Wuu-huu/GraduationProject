@@ -22,6 +22,31 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.zzk</groupId>
+            <artifactId>auth-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zzk</groupId>
+            <artifactId>user-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zzk</groupId>
+            <artifactId>video-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zzk</groupId>
+            <artifactId>interaction-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zzk</groupId>
+            <artifactId>message-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>

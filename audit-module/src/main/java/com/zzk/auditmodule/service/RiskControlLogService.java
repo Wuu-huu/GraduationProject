@@ -1,7 +1,10 @@
 package com.zzk.auditmodule.service;
 
-import com.zzk.auditmodule.entity.RiskControlLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.auditmodule.entity.RiskControlLog;
+import com.zzk.auditmodule.vo.RiskControlLogVO;
+import com.zzk.common.model.page.PageResponse;
+import com.zzk.messagemodule.dto.PageQuery;
 
 /**
 * @author 周振坤
@@ -10,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RiskControlLogService extends IService<RiskControlLog> {
 
+    void createLog(Long uid, String riskType, Integer bizType, Long bizId, String detail, Integer riskLevel);
+
+    PageResponse<RiskControlLogVO> listLogs(PageQuery query);
 }

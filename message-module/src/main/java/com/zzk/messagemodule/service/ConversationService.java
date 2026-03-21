@@ -1,7 +1,12 @@
 package com.zzk.messagemodule.service;
 
-import com.zzk.messagemodule.entity.Conversation;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.common.model.page.PageResponse;
+import com.zzk.messagemodule.dto.CreateConversationRequest;
+import com.zzk.messagemodule.dto.PageQuery;
+import com.zzk.messagemodule.entity.Conversation;
+import com.zzk.messagemodule.vo.ConversationVO;
+import com.zzk.messagemodule.vo.MessageVO;
 
 /**
 * @author 周振坤
@@ -10,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ConversationService extends IService<Conversation> {
 
+    ConversationVO createConversation(CreateConversationRequest request);
+
+    PageResponse<ConversationVO> listConversations(PageQuery query);
+
+    PageResponse<MessageVO> getConversationDetail(Long conversationId, PageQuery query);
+
+    void markConversationRead(Long conversationId);
 }

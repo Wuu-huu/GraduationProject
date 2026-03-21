@@ -1,7 +1,9 @@
 package com.zzk.messagemodule.service;
 
-import com.zzk.messagemodule.entity.Message;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.messagemodule.dto.SendMessageRequest;
+import com.zzk.messagemodule.entity.Message;
+import com.zzk.messagemodule.vo.MessageVO;
 
 /**
 * @author 周振坤
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface MessageService extends IService<Message> {
 
+    MessageVO sendMessage(Long conversationId, SendMessageRequest request);
 }

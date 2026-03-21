@@ -1,5 +1,6 @@
 package com.zzk.interactionmodule.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.Data;
 public class FavoriteVideoRequest {
 
     @NotNull
+    @JsonAlias("favoriteId")
     @Schema(description = "收藏夹 ID")
     private Long favoriteFolderId;
 }

@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="audit_task")
 @Data
 public class AuditTask {
+    @TableId(value = "audit_id", type = IdType.AUTO)
     private Long auditId;
 
     private Integer bizType;

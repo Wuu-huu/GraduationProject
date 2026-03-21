@@ -1,5 +1,6 @@
 package com.zzk.interactionmodule.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ public class CreateDanmuRequest {
 
     @NotNull
     @Min(0)
+    @JsonAlias("progressMs")
     @Schema(description = "时间点，单位毫秒", example = "3000")
     private Integer timePointMs;
 }

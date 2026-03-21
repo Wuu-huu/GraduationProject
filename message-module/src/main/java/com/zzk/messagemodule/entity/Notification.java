@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="notification")
 @Data
 public class Notification {
+    @TableId(value = "notification_id", type = IdType.AUTO)
     private Long notificationId;
 
     private Long uid;

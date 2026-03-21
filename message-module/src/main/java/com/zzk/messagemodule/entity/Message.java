@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="message")
 @Data
 public class Message {
+    @TableId(value = "message_id", type = IdType.AUTO)
     private Long messageId;
 
     private Long conversationId;

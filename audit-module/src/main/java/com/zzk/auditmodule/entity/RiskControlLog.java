@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="risk_control_log")
 @Data
 public class RiskControlLog {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long uid;

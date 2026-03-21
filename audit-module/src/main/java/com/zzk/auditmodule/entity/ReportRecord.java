@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="report_record")
 @Data
 public class ReportRecord {
+    @TableId(value = "report_id", type = IdType.AUTO)
     private Long reportId;
 
     private Long reporterUid;

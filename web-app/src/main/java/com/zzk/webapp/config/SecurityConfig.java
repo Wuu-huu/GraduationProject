@@ -45,6 +45,7 @@ public class SecurityConfig {
                     registry.requestMatchers(HttpMethod.GET, "/api/videos", "/api/videos/*", "/api/videos/*/stats",
                                     "/api/videos/*/parts", "/api/videos/*/category-tags",
                                     "/api/videos/*/comments", "/api/videos/*/danmakus",
+                                    "/api/comments/*/replies",
                                     "/api/videos/zone/*", "/api/video-series/*", "/api/video-series/*/videos",
                                     "/api/users/*/videos")
                             .permitAll();

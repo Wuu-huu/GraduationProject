@@ -1,5 +1,6 @@
 package com.zzk.interactionmodule.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class SaveFavoriteFolderRequest {
 
     @NotBlank
     @Size(max = 100)
+    @JsonAlias("name")
     @Schema(description = "收藏夹标题")
     private String title;
 
@@ -28,7 +30,8 @@ public class SaveFavoriteFolderRequest {
     private String coverUrl;
 
     @NotNull
-    @Schema(description = "可见性 0私密 1公开")
+    @JsonAlias("isPublic")
+    @Schema(description = "可见性，0私密 1公开")
     private Integer visible;
 
     @Schema(description = "排序号")

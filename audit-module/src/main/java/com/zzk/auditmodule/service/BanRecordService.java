@@ -1,7 +1,9 @@
 package com.zzk.auditmodule.service;
 
-import com.zzk.auditmodule.entity.BanRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.auditmodule.dto.BanUserRequest;
+import com.zzk.auditmodule.entity.BanRecord;
+import com.zzk.auditmodule.vo.BanRecordVO;
 
 /**
 * @author 周振坤
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface BanRecordService extends IService<BanRecord> {
 
+    BanRecordVO banUser(Long uid, BanUserRequest request);
 }

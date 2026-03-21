@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * 认证域核心服务，实现注册、登录和登录态查询。
+ * 认证核心服务，实现注册、登录和当前登录态查询。
  */
 @Slf4j
 @Service
@@ -50,96 +50,77 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginVO register(RegisterRequest request) {
-        try {
-            // 当前阶段注册流程先写入 user_info，用户域默认数据通过事件补齐。
-            validateUniqueFields(request);
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUsername(request.getUsername());
-            userInfo.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-            userInfo.setEmail(StringUtils.hasText(request.getEmail()) ? request.getEmail() : null);
-            userInfo.setPhone(StringUtils.hasText(request.getPhone()) ? request.getPhone() : null);
-            userInfo.setState(UserStateEnum.NORMAL.getCode());
-            userInfo.setRole(UserRoleEnum.USER.getCode());
-            userInfo.setRegisterTime(LocalDateTime.now());
-            userInfo.setLastLoginTime(LocalDateTime.now());
-            save(userInfo);
-            applicationEventPublisher.publishEvent(
-                    new UserRegisteredEvent(userInfo.getUid(), userInfo.getUsername(), userInfo.getRegisterTime()));
-            log.info("Register success, uid={}, username={}", userInfo.getUid(), userInfo.getUsername());
-            return buildLoginVO(userInfo);
-        } catch (Exception ex) {
-            log.error("Register service failed, username={}, email={}, phone={}",
-                    request.getUsername(), request.getEmail(), request.getPhone(), ex);
-            throw ex;
-        }
+        validateUniqueFields(request);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(request.getUsername().trim());
+        userInfo.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        userInfo.setEmail(normalizeOptional(request.getEmail()));
+        userInfo.setPhone(normalizeOptional(request.getPhone()));
+        userInfo.setState(UserStateEnum.NORMAL.getCode());
+        userInfo.setRole(UserRoleEnum.USER.getCode());
+        userInfo.setRegisterTime(LocalDateTime.now());
+        userInfo.setLastLoginTime(LocalDateTime.now());
+
+        save(userInfo);
+        applicationEventPublisher.publishEvent(
+                new UserRegisteredEvent(userInfo.getUid(), userInfo.getUsername(), userInfo.getRegisterTime()));
+        log.info("Register success, uid={}, username={}", userInfo.getUid(), userInfo.getUsername());
+        return buildLoginVO(userInfo);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginVO login(LoginRequest request) {
-        try {
-            UserInfo userInfo = lambdaQuery().eq(UserInfo::getUsername, request.getUsername()).one();
-            if (userInfo == null) {
-                throw new BusinessException(ApiCodeEnum.ACCOUNT_NOT_FOUND);
-            }
-            if (UserStateEnum.fromCode(userInfo.getState()) == UserStateEnum.BANNED) {
-                throw new BusinessException(ApiCodeEnum.ACCOUNT_BANNED);
-            }
-            if (!passwordEncoder.matches(request.getPassword(), userInfo.getPasswordHash())) {
-                throw new BusinessException(ApiCodeEnum.PASSWORD_ERROR);
-            }
-            userInfo.setLastLoginTime(LocalDateTime.now());
-            updateById(userInfo);
-            log.info("Login success, uid={}, username={}", userInfo.getUid(), userInfo.getUsername());
-            return buildLoginVO(userInfo);
-        } catch (Exception ex) {
-            log.error("Login service failed, username={}", request.getUsername(), ex);
-            throw ex;
+        UserInfo userInfo = lambdaQuery().eq(UserInfo::getUsername, request.getUsername()).one();
+        if (userInfo == null) {
+            throw new BusinessException(ApiCodeEnum.ACCOUNT_NOT_FOUND);
         }
+        if (UserStateEnum.fromCode(userInfo.getState()) == UserStateEnum.BANNED) {
+            throw new BusinessException(ApiCodeEnum.ACCOUNT_BANNED);
+        }
+        if (!passwordEncoder.matches(request.getPassword(), userInfo.getPasswordHash())) {
+            throw new BusinessException(ApiCodeEnum.PASSWORD_ERROR);
+        }
+
+        userInfo.setLastLoginTime(LocalDateTime.now());
+        updateById(userInfo);
+        log.info("Login success, uid={}, username={}", userInfo.getUid(), userInfo.getUsername());
+        return buildLoginVO(userInfo);
     }
 
     @Override
     public CurrentUserVO getCurrentUser() {
-        try {
-            Long currentUserId = SecurityContextUtils.getCurrentUserId();
-            UserInfo userInfo = getById(currentUserId);
-            if (userInfo == null) {
-                throw new BusinessException(ApiCodeEnum.ACCOUNT_NOT_FOUND);
-            }
-            return CurrentUserVO.builder()
-                    .uid(userInfo.getUid())
-                    .username(userInfo.getUsername())
-                    .role(userInfo.getRole())
-                    .state(userInfo.getState())
-                    .build();
-        } catch (Exception ex) {
-            log.error("Get current user failed", ex);
-            throw ex;
+        Long currentUserId = SecurityContextUtils.getCurrentUserId();
+        UserInfo userInfo = getById(currentUserId);
+        if (userInfo == null) {
+            throw new BusinessException(ApiCodeEnum.ACCOUNT_NOT_FOUND);
         }
+        return CurrentUserVO.builder()
+                .uid(userInfo.getUid())
+                .username(userInfo.getUsername())
+                .role(userInfo.getRole())
+                .state(userInfo.getState())
+                .build();
     }
 
     private void validateUniqueFields(RegisterRequest request) {
-        try {
-            if (lambdaQuery().eq(UserInfo::getUsername, request.getUsername()).exists()) {
-                throw new BusinessException(ApiCodeEnum.USERNAME_EXISTS);
-            }
-            if (StringUtils.hasText(request.getEmail())
-                    && lambdaQuery().eq(UserInfo::getEmail, request.getEmail()).exists()) {
-                throw new BusinessException(ApiCodeEnum.BAD_REQUEST, "邮箱已被占用");
-            }
-            if (StringUtils.hasText(request.getPhone())
-                    && lambdaQuery().eq(UserInfo::getPhone, request.getPhone()).exists()) {
-                throw new BusinessException(ApiCodeEnum.BAD_REQUEST, "手机号已被占用");
-            }
-        } catch (Exception ex) {
-            log.error("Validate unique fields failed, username={}, email={}, phone={}",
-                    request.getUsername(), request.getEmail(), request.getPhone(), ex);
-            throw ex;
+        String username = request.getUsername().trim();
+        String email = normalizeOptional(request.getEmail());
+        String phone = normalizeOptional(request.getPhone());
+
+        if (lambdaQuery().eq(UserInfo::getUsername, username).exists()) {
+            throw new BusinessException(ApiCodeEnum.USERNAME_EXISTS);
+        }
+        if (email != null && lambdaQuery().eq(UserInfo::getEmail, email).exists()) {
+            throw new BusinessException(ApiCodeEnum.BAD_REQUEST, "邮箱已被占用");
+        }
+        if (phone != null && lambdaQuery().eq(UserInfo::getPhone, phone).exists()) {
+            throw new BusinessException(ApiCodeEnum.BAD_REQUEST, "手机号已被占用");
         }
     }
 
     private LoginVO buildLoginVO(UserInfo userInfo) {
-        // 登录成功后统一返回 token 和基础身份信息，便于前端建立会话。
         LoginUser loginUser = LoginUser.builder()
                 .uid(userInfo.getUid())
                 .username(userInfo.getUsername())
@@ -152,5 +133,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .username(userInfo.getUsername())
                 .role(userInfo.getRole())
                 .build();
+    }
+
+    private String normalizeOptional(String value) {
+        return StringUtils.hasText(value) ? value.trim() : null;
     }
 }

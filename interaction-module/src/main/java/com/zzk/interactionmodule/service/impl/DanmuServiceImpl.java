@@ -5,20 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzk.common.security.SecurityContextUtils;
 import com.zzk.interactionmodule.dto.CreateDanmuRequest;
 import com.zzk.interactionmodule.entity.Danmu;
+import com.zzk.interactionmodule.mapper.DanmuMapper;
 import com.zzk.interactionmodule.service.DanmuService;
 import com.zzk.interactionmodule.vo.DanmuVO;
-import com.zzk.interactionmodule.mapper.DanmuMapper;
 import com.zzk.videomodule.facade.VideoFacade;
 import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
-* @author 周振坤
-* @description 针对表【danmu(弹幕表)】的数据库操作Service实现
-* @createDate 2026-03-19 23:34:53
-*/
 @Service
 public class DanmuServiceImpl extends ServiceImpl<DanmuMapper, Danmu>
         implements DanmuService {
@@ -38,9 +33,9 @@ public class DanmuServiceImpl extends ServiceImpl<DanmuMapper, Danmu>
         danmu.setPartId(request.getPartId());
         danmu.setUid(SecurityContextUtils.getCurrentUserId());
         danmu.setContent(request.getContent().trim());
-        danmu.setColor(request.getColor());
-        danmu.setFontSize(request.getFontSize());
-        danmu.setMode(request.getMode());
+        danmu.setColor(normalizeColor(request.getColor()));
+        danmu.setFontSize(request.getFontSize() == null ? 25 : request.getFontSize());
+        danmu.setMode(request.getMode() == null ? 1 : request.getMode());
         danmu.setTimePointMs(request.getTimePointMs());
         danmu.setStatus(1);
         danmu.setCreateTime(new Date());
@@ -76,8 +71,19 @@ public class DanmuServiceImpl extends ServiceImpl<DanmuMapper, Danmu>
                 .createTime(danmu.getCreateTime())
                 .build();
     }
+
+    private String normalizeColor(String color) {
+        if (color == null || color.isBlank()) {
+            return "#FFFFFF";
+        }
+        String value = color.trim();
+        if (value.matches("^#[0-9A-Fa-f]{6}$")) {
+            return value.toUpperCase();
+        }
+        if (value.matches("^[0-9]{1,8}$")) {
+            int rgb = Integer.parseInt(value);
+            return String.format("#%06X", rgb & 0xFFFFFF);
+        }
+        return "#FFFFFF";
+    }
 }
-
-
-
-
