@@ -1,13 +1,7 @@
 package com.zzk.recommendmodule;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public final class RecommendModuleApplication {
 
-@SpringBootApplication
-public class RecommendModuleApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(RecommendModuleApplication.class, args);
+    private RecommendModuleApplication() {
     }
-
 }

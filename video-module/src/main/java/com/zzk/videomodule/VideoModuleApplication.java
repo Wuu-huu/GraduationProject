@@ -1,13 +1,7 @@
 package com.zzk.videomodule;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public final class VideoModuleApplication {
 
-@SpringBootApplication
-public class VideoModuleApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(VideoModuleApplication.class, args);
+    private VideoModuleApplication() {
     }
-
 }

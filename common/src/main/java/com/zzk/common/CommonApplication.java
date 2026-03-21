@@ -1,13 +1,10 @@
 package com.zzk.common;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+/**
+ * Common 模块占位类，用于承载公共基础设施包结构。
+ */
+public final class CommonApplication {
 
-@SpringBootApplication
-public class CommonApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(CommonApplication.class, args);
+    private CommonApplication() {
     }
-
 }

@@ -1,42 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 使用 Spring Boot 官方父模块统一管理依赖版本 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>   <!-- 当前稳定版，可改为 3.3.x 等 -->
-        <relativePath/>            <!-- 从仓库获取，不需要本地路径 -->
+        <version>3.2.5</version>
+        <relativePath/>
     </parent>
 
     <groupId>com.zzk</groupId>
     <artifactId>GraduationProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>     <!-- 父项目必须为 pom 类型 -->
-
+    <packaging>pom</packaging>
     <name>GraduationProject</name>
-    <description>毕业设计父项目，管理公共依赖和模块</description>
+    <description>Modular monolith backend for video recommendation system</description>
 
     <properties>
-        <!-- 明确指定 JDK 版本和编码 -->
         <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <!-- 自定义依赖版本 -->
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <jjwt.version>0.12.6</jjwt.version>
         <minio.version>8.5.10</minio.version>
         <springdoc.version>2.6.0</springdoc.version>
+        <lombok.version>1.18.36</lombok.version>
     </properties>
 
-
     <modules>
+        <module>common</module>
         <module>auth-module</module>
         <module>user-module</module>
         <module>video-module</module>
@@ -44,21 +38,17 @@
         <module>message-module</module>
         <module>audit-module</module>
         <module>recommend-module</module>
-        <module>common</module>
+        <module>admin-module</module>
+        <module>web-app</module>
     </modules>
 
-
-    <!-- 统一管理非 Spring Boot 官方维护的依赖版本 -->
     <dependencyManagement>
         <dependencies>
-            <!-- MyBatis-Plus（Spring Boot 3 专用） -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-
-            <!-- JWT 相关库 -->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
@@ -68,40 +58,38 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-impl</artifactId>
                 <version>${jjwt.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
-                <scope>runtime</scope>
             </dependency>
-
-            <!-- MinIO 客户端 -->
             <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
-
-            <!-- OpenAPI 3 (SpringDoc) 替代 Swagger2 -->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc.version}</version>
             </dependency>
-
-            <!-- 注意：Redis、MySQL 驱动等由 Spring Boot 父模块管理，无需重复定义版本 -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <!-- Spring Boot 打包插件（父项目可不启用，但保留方便子模块继承） -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

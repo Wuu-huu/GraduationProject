@@ -1,13 +1,7 @@
 package com.zzk.auditmodule;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public final class AuditModuleApplication {
 
-@SpringBootApplication
-public class AuditModuleApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(AuditModuleApplication.class, args);
+    private AuditModuleApplication() {
     }
-
 }

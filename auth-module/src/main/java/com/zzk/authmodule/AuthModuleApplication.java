@@ -1,13 +1,10 @@
 package com.zzk.authmodule;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+/**
+ * Auth 模块占位类，保留模块独立演进的命名空间。
+ */
+public final class AuthModuleApplication {
 
-@SpringBootApplication
-public class AuthModuleApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(AuthModuleApplication.class, args);
+    private AuthModuleApplication() {
     }
-
 }

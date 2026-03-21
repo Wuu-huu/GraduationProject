@@ -1,13 +1,20 @@
 package com.zzk.authmodule.service;
 
-import com.zzk.authmodule.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.authmodule.dto.LoginRequest;
+import com.zzk.authmodule.dto.RegisterRequest;
+import com.zzk.authmodule.entity.UserInfo;
+import com.zzk.authmodule.vo.CurrentUserVO;
+import com.zzk.authmodule.vo.LoginVO;
 
 /**
-* @author 周振坤
-* @description 针对表【user_info(用户主表)】的数据库操作Service
-* @createDate 2026-03-19 23:18:11
-*/
+ * 认证域服务接口。
+ */
 public interface UserInfoService extends IService<UserInfo> {
 
+    LoginVO register(RegisterRequest request);
+
+    LoginVO login(LoginRequest request);
+
+    CurrentUserVO getCurrentUser();
 }
