@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zzk.authmoudule.mapper.UserInfoMapper">
+<mapper namespace="com.zzk.authmodule.mapper.UserInfoMapper">
 
-    <resultMap id="BaseResultMap" type="com.zzk.authmoudule.UserInfo">
+    <resultMap id="BaseResultMap" type="com.zzk.authmodule.entity.UserInfo">
             <id property="uid" column="uid" />
             <result property="username" column="username" />
             <result property="passwordHash" column="password_hash" />

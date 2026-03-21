@@ -1,18 +1,18 @@
 package com.zzk.usermodule.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * @TableName user_setting
+ * 用户设置实体，映射 user_setting。
  */
-@TableName(value ="user_setting")
 @Data
+@TableName("user_setting")
 public class UserSetting {
+
+    @TableId("uid")
     private Long uid;
 
     private Integer openRecommend;
@@ -25,5 +25,5 @@ public class UserSetting {
 
     private Integer openFavoriteVisible;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }

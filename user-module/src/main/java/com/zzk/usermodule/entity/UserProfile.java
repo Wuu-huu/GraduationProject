@@ -1,18 +1,19 @@
 package com.zzk.usermodule.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * @TableName user_profile
+ * 用户资料实体，映射 user_profile。
  */
-@TableName(value ="user_profile")
 @Data
+@TableName("user_profile")
 public class UserProfile {
+
+    @TableId("uid")
     private Long uid;
 
     private String nickname;
@@ -23,7 +24,7 @@ public class UserProfile {
 
     private Integer gender;
 
-    private Date birthday;
+    private LocalDate birthday;
 
     private String signature;
 
@@ -35,5 +36,5 @@ public class UserProfile {
 
     private String authDesc;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }

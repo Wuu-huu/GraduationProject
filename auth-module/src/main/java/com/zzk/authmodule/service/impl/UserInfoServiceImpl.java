@@ -11,6 +11,7 @@ import com.zzk.authmodule.vo.LoginVO;
 import com.zzk.common.enums.ApiCodeEnum;
 import com.zzk.common.enums.UserRoleEnum;
 import com.zzk.common.enums.UserStateEnum;
+import com.zzk.common.event.UserRegisteredEvent;
 import com.zzk.common.exception.BusinessException;
 import com.zzk.common.model.security.LoginUser;
 import com.zzk.common.security.JwtProperties;
@@ -18,6 +19,7 @@ import com.zzk.common.security.JwtTokenProvider;
 import com.zzk.common.security.SecurityContextUtils;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,20 +35,23 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public UserInfoServiceImpl(PasswordEncoder passwordEncoder,
                                JwtTokenProvider jwtTokenProvider,
-                               JwtProperties jwtProperties) {
+                               JwtProperties jwtProperties,
+                               ApplicationEventPublisher applicationEventPublisher) {
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtProperties = jwtProperties;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginVO register(RegisterRequest request) {
         try {
-            // 当前阶段注册流程只落 user_info，扩展资料由后续 user-module 补齐。
+            // 当前阶段注册流程先写入 user_info，用户域默认数据通过事件补齐。
             validateUniqueFields(request);
             UserInfo userInfo = new UserInfo();
             userInfo.setUsername(request.getUsername());
@@ -58,6 +63,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfo.setRegisterTime(LocalDateTime.now());
             userInfo.setLastLoginTime(LocalDateTime.now());
             save(userInfo);
+            applicationEventPublisher.publishEvent(
+                    new UserRegisteredEvent(userInfo.getUid(), userInfo.getUsername(), userInfo.getRegisterTime()));
             log.info("Register success, uid={}, username={}", userInfo.getUid(), userInfo.getUsername());
             return buildLoginVO(userInfo);
         } catch (Exception ex) {
@@ -132,7 +139,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     private LoginVO buildLoginVO(UserInfo userInfo) {
-        // 登录成功后统一返回 token 与基础身份信息，便于前端直接建立会话。
+        // 登录成功后统一返回 token 和基础身份信息，便于前端建立会话。
         LoginUser loginUser = LoginUser.builder()
                 .uid(userInfo.getUid())
                 .username(userInfo.getUsername())

@@ -15,7 +15,7 @@ public enum ApiCodeEnum {
     USERNAME_EXISTS(30001, "用户名已存在"),
     ACCOUNT_NOT_FOUND(30002, "账号不存在"),
     PASSWORD_ERROR(30003, "用户名或密码错误"),
-    ACCOUNT_BANNED(30004, "账号已封禁"),
+    ACCOUNT_BANNED(30004, "账号已被封禁"),
     SYSTEM_ERROR(50000, "系统异常，请稍后重试");
 
     private final int code;

@@ -1,18 +1,19 @@
 package com.zzk.usermodule.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * @TableName user_follow
+ * 用户关注关系实体，映射 user_follow。
  */
-@TableName(value ="user_follow")
 @Data
+@TableName("user_follow")
 public class UserFollow {
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long followerUid;
@@ -21,5 +22,5 @@ public class UserFollow {
 
     private Integer state;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 }

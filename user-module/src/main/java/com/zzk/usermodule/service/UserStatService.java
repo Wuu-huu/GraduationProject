@@ -10,4 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserStatService extends IService<UserStat> {
 
+    void initUserStat(Long uid);
+
+    void increaseFansCount(Long uid, int delta);
+
+    void increaseFollowingCount(Long uid, int delta);
 }

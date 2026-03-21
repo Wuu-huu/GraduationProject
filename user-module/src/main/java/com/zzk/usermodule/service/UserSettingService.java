@@ -2,6 +2,8 @@ package com.zzk.usermodule.service;
 
 import com.zzk.usermodule.entity.UserSetting;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.usermodule.dto.UpdateUserSettingRequest;
+import com.zzk.usermodule.vo.UserSettingVO;
 
 /**
 * @author 周振坤
@@ -10,4 +12,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserSettingService extends IService<UserSetting> {
 
+    void initUserSetting(Long uid);
+
+    UserSettingVO getCurrentUserSetting();
+
+    UserSettingVO updateCurrentUserSetting(UpdateUserSettingRequest request);
 }

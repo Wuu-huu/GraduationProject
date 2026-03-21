@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * 安全上下文工具，屏蔽从 SecurityContext 取当前用户的细节。
+ * 安全上下文工具，统一读取当前登录用户。
  */
 public final class SecurityContextUtils {
 

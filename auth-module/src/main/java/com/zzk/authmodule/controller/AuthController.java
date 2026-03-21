@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 认证模块对外入口，当前阶段提供注册、登录和当前用户信息接口。
+ * 认证模块对外接口，当前阶段提供注册、登录和当前用户信息接口。
  */
 @Slf4j
 @Tag(name = "认证模块")

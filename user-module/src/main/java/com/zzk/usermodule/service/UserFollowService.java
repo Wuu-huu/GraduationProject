@@ -2,6 +2,9 @@ package com.zzk.usermodule.service;
 
 import com.zzk.usermodule.entity.UserFollow;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.common.model.page.PageResponse;
+import com.zzk.usermodule.dto.UserFollowPageQuery;
+import com.zzk.usermodule.vo.UserCardVO;
 
 /**
 * @author 周振坤
@@ -10,4 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserFollowService extends IService<UserFollow> {
 
+    void follow(Long targetUid);
+
+    void unfollow(Long targetUid);
+
+    boolean hasFollowed(Long followerUid, Long followeeUid);
+
+    PageResponse<UserCardVO> getFollowers(Long targetUid, UserFollowPageQuery query);
+
+    PageResponse<UserCardVO> getFollowing(Long targetUid, UserFollowPageQuery query);
 }
