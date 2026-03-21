@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="video_exposure_log")
 @Data
 public class VideoExposureLog {
+    @TableId(value = "exposure_id", type = IdType.AUTO)
     private Long exposureId;
 
     private String requestId;

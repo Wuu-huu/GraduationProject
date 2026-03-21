@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="recommend_request")
 @Data
 public class RecommendRequest {
+    @TableId(value = "request_id")
     private String requestId;
 
     private Long uid;

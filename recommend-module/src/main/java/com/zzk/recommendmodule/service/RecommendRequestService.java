@@ -2,6 +2,7 @@ package com.zzk.recommendmodule.service;
 
 import com.zzk.recommendmodule.entity.RecommendRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.Date;
 
 /**
 * @author 周振坤
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RecommendRequestService extends IService<RecommendRequest> {
 
+    RecommendRequest createRequest(Long uid, String scene, Long pageNo, String deviceType, Date requestTime);
 }

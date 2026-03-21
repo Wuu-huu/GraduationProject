@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="search_log")
 @Data
 public class SearchLog {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long uid;

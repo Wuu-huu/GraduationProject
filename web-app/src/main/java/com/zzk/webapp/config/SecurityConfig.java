@@ -46,6 +46,8 @@ public class SecurityConfig {
                                     "/api/videos/*/parts", "/api/videos/*/category-tags",
                                     "/api/videos/*/comments", "/api/videos/*/danmakus",
                                     "/api/comments/*/replies",
+                                    "/api/recommend/home", "/api/recommend/hot",
+                                    "/api/recommend/videos/*/related", "/api/recommend/zones/*",
                                     "/api/videos/zone/*", "/api/video-series/*", "/api/video-series/*/videos",
                                     "/api/users/*/videos")
                             .permitAll();

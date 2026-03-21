@@ -2,6 +2,7 @@ package com.zzk.interactionmodule.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzk.common.event.UserBehaviorTrackEvent;
 import com.zzk.common.security.SecurityContextUtils;
 import com.zzk.interactionmodule.dto.CreateDanmuRequest;
 import com.zzk.interactionmodule.entity.Danmu;
@@ -11,6 +12,7 @@ import com.zzk.interactionmodule.vo.DanmuVO;
 import com.zzk.videomodule.facade.VideoFacade;
 import java.util.Date;
 import java.util.List;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,11 @@ public class DanmuServiceImpl extends ServiceImpl<DanmuMapper, Danmu>
         implements DanmuService {
 
     private final VideoFacade videoFacade;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public DanmuServiceImpl(VideoFacade videoFacade) {
+    public DanmuServiceImpl(VideoFacade videoFacade, ApplicationEventPublisher applicationEventPublisher) {
         this.videoFacade = videoFacade;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -41,6 +45,17 @@ public class DanmuServiceImpl extends ServiceImpl<DanmuMapper, Danmu>
         danmu.setCreateTime(new Date());
         save(danmu);
         videoFacade.adjustVideoStats(request.getVid(), 0, 0, 0, 0, 0, 1, 0);
+        applicationEventPublisher.publishEvent(new UserBehaviorTrackEvent(
+                SecurityContextUtils.getCurrentUserId(),
+                1,
+                request.getVid(),
+                "DANMU",
+                danmu.getDanmuId() == null ? null : String.valueOf(danmu.getDanmuId()),
+                "INTERACTION",
+                "VIDEO_DETAIL",
+                "PC",
+                new Date()
+        ));
         return toVO(danmu);
     }
 

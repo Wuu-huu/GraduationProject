@@ -2,6 +2,7 @@ package com.zzk.interactionmodule.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzk.common.event.UserBehaviorTrackEvent;
 import com.zzk.common.enums.ApiCodeEnum;
 import com.zzk.common.exception.BusinessException;
 import com.zzk.common.security.SecurityContextUtils;
@@ -19,6 +20,7 @@ import com.zzk.videomodule.facade.VideoFacade;
 import com.zzk.videomodule.vo.VideoCardVO;
 import java.util.Date;
 import java.util.List;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +36,16 @@ public class FavoriteFolderServiceImpl extends ServiceImpl<FavoriteFolderMapper,
     private final FavoriteItemMapper favoriteItemMapper;
     private final UserVideoStateMapper userVideoStateMapper;
     private final VideoFacade videoFacade;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public FavoriteFolderServiceImpl(FavoriteItemMapper favoriteItemMapper,
                                      UserVideoStateMapper userVideoStateMapper,
-                                     VideoFacade videoFacade) {
+                                     VideoFacade videoFacade,
+                                     ApplicationEventPublisher applicationEventPublisher) {
         this.favoriteItemMapper = favoriteItemMapper;
         this.userVideoStateMapper = userVideoStateMapper;
         this.videoFacade = videoFacade;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -138,6 +143,7 @@ public class FavoriteFolderServiceImpl extends ServiceImpl<FavoriteFolderMapper,
             videoFacade.adjustVideoStats(videoId, 0, 0, 0, 1, 0, 0, 0);
         }
         updateFavoriteState(folder.getUid(), videoId, true);
+        publishVideoBehavior(videoId, "FAVORITE_FOLDER_ADD", favoriteFolderId);
     }
 
     @Override
@@ -239,6 +245,20 @@ public class FavoriteFolderServiceImpl extends ServiceImpl<FavoriteFolderMapper,
 
     private int value(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    private void publishVideoBehavior(Long videoId, String eventType, Long folderId) {
+        applicationEventPublisher.publishEvent(new UserBehaviorTrackEvent(
+                SecurityContextUtils.getCurrentUserId(),
+                1,
+                videoId,
+                eventType,
+                folderId == null ? null : String.valueOf(folderId),
+                "INTERACTION",
+                "FAVORITE_FOLDER",
+                "PC",
+                new Date()
+        ));
     }
 }
 

@@ -2,6 +2,7 @@ package com.zzk.interactionmodule.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzk.common.event.UserBehaviorTrackEvent;
 import com.zzk.common.enums.ApiCodeEnum;
 import com.zzk.common.exception.BusinessException;
 import com.zzk.common.security.SecurityContextUtils;
@@ -19,6 +20,7 @@ import com.zzk.usermodule.service.UserStatService;
 import com.zzk.videomodule.facade.VideoFacade;
 import com.zzk.videomodule.vo.VideoSnapshotVO;
 import java.util.Date;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,15 +37,18 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
     private final FavoriteFolderService favoriteFolderService;
     private final VideoFacade videoFacade;
     private final UserStatService userStatService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public VideoActionServiceImpl(UserVideoStateMapper userVideoStateMapper,
                                   FavoriteFolderService favoriteFolderService,
                                   VideoFacade videoFacade,
-                                  UserStatService userStatService) {
+                                  UserStatService userStatService,
+                                  ApplicationEventPublisher applicationEventPublisher) {
         this.userVideoStateMapper = userVideoStateMapper;
         this.favoriteFolderService = favoriteFolderService;
         this.videoFacade = videoFacade;
         this.userStatService = userStatService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -65,6 +70,7 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
         videoFacade.adjustVideoStats(videoId, 1, dislikeDelta, 0, 0, 0, 0, 0);
         userStatService.increaseLikeReceivedCount(snapshot.getUid(), 1);
         recordAction(videoId, VideoActionTypeEnum.LIKE, 1, 0);
+        publishVideoBehavior(videoId, "LIKE", "1");
         return toVO(state);
     }
 
@@ -136,6 +142,7 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
         userVideoStateMapper.updateById(state);
         videoFacade.adjustVideoStats(videoId, 0, 0, request.getCoinCount(), 0, 0, 0, 0);
         recordAction(videoId, VideoActionTypeEnum.COIN, request.getCoinCount(), 0);
+        publishVideoBehavior(videoId, "COIN", String.valueOf(request.getCoinCount()));
         return toVO(state);
     }
 
@@ -148,6 +155,7 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
             state.setWatchLater(1);
             userVideoStateMapper.updateById(state);
             recordAction(videoId, VideoActionTypeEnum.WATCH_LATER, 1, 0);
+            publishVideoBehavior(videoId, "WATCH_LATER", "1");
         }
         return toVO(state);
     }
@@ -174,6 +182,7 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
         state.setFavorited(1);
         userVideoStateMapper.updateById(state);
         recordAction(videoId, VideoActionTypeEnum.FAVORITE, 1, 0);
+        publishVideoBehavior(videoId, "FAVORITE", String.valueOf(request.getFavoriteFolderId()));
         return toVO(state);
     }
 
@@ -236,6 +245,20 @@ public class VideoActionServiceImpl extends ServiceImpl<VideoActionMapper, Video
 
     private int value(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    private void publishVideoBehavior(Long videoId, String eventType, String eventValue) {
+        applicationEventPublisher.publishEvent(new UserBehaviorTrackEvent(
+                SecurityContextUtils.getCurrentUserId(),
+                1,
+                videoId,
+                eventType,
+                eventValue,
+                "INTERACTION",
+                "VIDEO_DETAIL",
+                "PC",
+                new Date()
+        ));
     }
 }
 

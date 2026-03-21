@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="video_feature_profile")
 @Data
 public class VideoFeatureProfile {
+    @TableId(value = "vid")
     private Long vid;
 
     private Long categoryId;

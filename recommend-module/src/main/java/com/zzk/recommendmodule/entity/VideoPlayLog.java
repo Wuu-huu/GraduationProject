@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="video_play_log")
 @Data
 public class VideoPlayLog {
+    @TableId(value = "play_id", type = IdType.AUTO)
     private Long playId;
 
     private Long uid;

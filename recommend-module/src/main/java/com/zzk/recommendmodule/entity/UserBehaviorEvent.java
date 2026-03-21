@@ -13,6 +13,7 @@ import lombok.Data;
 @TableName(value ="user_behavior_event")
 @Data
 public class UserBehaviorEvent {
+    @TableId(value = "event_id", type = IdType.AUTO)
     private Long eventId;
 
     private Long uid;

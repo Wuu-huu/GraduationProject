@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzk.authmodule.entity.UserInfo;
 import com.zzk.authmodule.service.UserInfoService;
+import com.zzk.common.event.UserBehaviorTrackEvent;
 import com.zzk.common.enums.ApiCodeEnum;
 import com.zzk.common.exception.BusinessException;
 import com.zzk.common.model.page.PageResponse;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,17 +49,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     private final UserInfoService userInfoService;
     private final UserProfileService userProfileService;
     private final VideoFacade videoFacade;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public CommentServiceImpl(CommentActionMapper commentActionMapper,
                               VideoActionMapper videoActionMapper,
                               UserInfoService userInfoService,
                               UserProfileService userProfileService,
-                              VideoFacade videoFacade) {
+                              VideoFacade videoFacade,
+                              ApplicationEventPublisher applicationEventPublisher) {
         this.commentActionMapper = commentActionMapper;
         this.videoActionMapper = videoActionMapper;
         this.userInfoService = userInfoService;
         this.userProfileService = userProfileService;
         this.videoFacade = videoFacade;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -84,6 +89,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         save(comment);
         videoFacade.adjustVideoStats(request.getVid(), 0, 0, 0, 0, 1, 0, 0);
         recordVideoAction(request.getVid(), VideoActionTypeEnum.COMMENT, 1, 0);
+        publishVideoBehavior(request.getVid(), "COMMENT", comment.getCommentId());
         return toVO(comment, currentUserId, false);
     }
 
@@ -112,6 +118,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         updateById(parent);
         videoFacade.adjustVideoStats(parent.getVid(), 0, 0, 0, 0, 1, 0, 0);
         recordVideoAction(parent.getVid(), VideoActionTypeEnum.COMMENT, 1, 0);
+        publishVideoBehavior(parent.getVid(), "COMMENT_REPLY", comment.getCommentId());
         return toVO(comment, currentUserId, false);
     }
 
@@ -299,6 +306,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
 
     private long value(Long value) {
         return value == null ? 0L : value;
+    }
+
+    private void publishVideoBehavior(Long videoId, String eventType, Long eventValue) {
+        applicationEventPublisher.publishEvent(new UserBehaviorTrackEvent(
+                SecurityContextUtils.getCurrentUserId(),
+                1,
+                videoId,
+                eventType,
+                eventValue == null ? null : String.valueOf(eventValue),
+                "INTERACTION",
+                "VIDEO_DETAIL",
+                "PC",
+                new Date()
+        ));
     }
 }
 

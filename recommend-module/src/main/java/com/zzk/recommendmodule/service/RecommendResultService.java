@@ -2,6 +2,9 @@ package com.zzk.recommendmodule.service;
 
 import com.zzk.recommendmodule.entity.RecommendResult;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.recommendmodule.vo.RecommendVideoVO;
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author 周振坤
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RecommendResultService extends IService<RecommendResult> {
 
+    void saveResults(String requestId, Long uid, List<RecommendVideoVO> videos, Date createTime);
 }

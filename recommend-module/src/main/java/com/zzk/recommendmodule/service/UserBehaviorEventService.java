@@ -2,6 +2,7 @@ package com.zzk.recommendmodule.service;
 
 import com.zzk.recommendmodule.entity.UserBehaviorEvent;
 import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.Date;
 
 /**
 * @author 周振坤
@@ -10,4 +11,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserBehaviorEventService extends IService<UserBehaviorEvent> {
 
+    void recordBehavior(Long uid,
+                        Integer objType,
+                        Long objId,
+                        String eventType,
+                        String eventValue,
+                        String scene,
+                        String pageFrom,
+                        String deviceType,
+                        Date clientTime);
 }

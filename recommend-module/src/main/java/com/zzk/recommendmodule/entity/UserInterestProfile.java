@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="user_interest_profile")
 @Data
 public class UserInterestProfile {
+    @TableId(value = "uid")
     private Long uid;
 
     private Object categoryWeights;

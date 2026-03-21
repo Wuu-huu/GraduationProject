@@ -9,29 +9,22 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName recommend_result
+ * @TableName recommend_item_similarity
  */
-@TableName(value ="recommend_result")
+@TableName(value ="recommend_item_similarity")
 @Data
-public class RecommendResult {
+public class RecommendItemSimilarity {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String requestId;
-
-    private Long uid;
-
     private Long vid;
 
-    private Integer positionNo;
+    @TableField("related_vid")
+    private Long relatedVid;
 
-    private String recallSource;
+    private BigDecimal score;
 
-    private BigDecimal rankScore;
+    private String source;
 
-    private BigDecimal rerankScore;
-
-    private BigDecimal finalScore;
-
-    private Date createTime;
+    private Date updateTime;
 }
