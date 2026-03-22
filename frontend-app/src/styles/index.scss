@@ -1,0 +1,76 @@
+@use './variables.scss' as *;
+@use './mixins.scss' as *;
+@use './reset.scss';
+
+:root {
+  color: $color-text;
+  background: $color-bg;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(147, 197, 253, 0.28), transparent 28%),
+    radial-gradient(circle at top right, rgba(251, 191, 36, 0.16), transparent 24%),
+    linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+  color: $color-text;
+}
+
+.layout-shell {
+  min-height: 100vh;
+}
+
+.layout-content {
+  width: min(1360px, calc(100% - 40px));
+  margin: 32px auto 40px;
+}
+
+.layout-panel {
+  width: min(1360px, calc(100% - 40px));
+  margin: 32px auto 40px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.blank-layout {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.page-shell {
+  display: grid;
+  gap: 28px;
+}
+
+.auth-page {
+  width: min(100%, 460px);
+}
+
+.auth-card,
+.el-card {
+  border-radius: 24px;
+}
+
+.section-title-block {
+  display: grid;
+  gap: 6px;
+}
+
+.section-eyebrow {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
