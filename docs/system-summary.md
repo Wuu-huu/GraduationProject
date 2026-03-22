@@ -1,444 +1,349 @@
-# 系统总结文档
+# 系统概要与设计总结
 
 ## 1. 系统概要设计
 
-本项目是一个类哔哩哔哩视频平台后端系统，采用 Spring Boot 多模块单体架构实现。系统以业务域拆分模块，在当前阶段保持单体部署、统一启动，但模块之间已经按清晰边界组织，为后续平滑升级到 Spring Cloud 做准备。
+本项目是一个类哔哩哔哩视频平台，采用前后端分离架构。
 
-当前后端已覆盖核心业务链路：
+- 后端：`Spring Boot 3 + Maven 多模块`
+- 前端：`Vue 3 + TypeScript + Vite`
+- 当前部署形态：模块化单体
+- 未来演进方向：可按业务域平滑拆分到 `Spring Cloud`
 
-- 用户注册、登录、鉴权
-- 用户资料、关注、设置
-- 视频发布、草稿、详情、分 P、合集、统计
-- 点赞、投币、收藏、评论、弹幕、稍后再看
-- 私信、通知、未读数
-- 视频审核、评论审核、举报、封禁禁言
-- 首页推荐、相关推荐、分区推荐、热门榜
+系统覆盖的核心业务域如下：
+- 用户与认证
+- 视频内容
+- 互动行为
+- 消息通知
+- 审核管理
+- 推荐服务
+- 管理后台
 
-项目统一采用：
-
-- 统一响应模型 `code / message / data`
-- Spring Security + JWT 认证
-- MyBatis-Plus 持久层
-- 基于事件的行为埋点与推荐日志
-- 后端统一处理跨域，支持前后端分离联调
+设计原则：
+- 当前先完成可联调、可运行、可演示的模块化单体
+- 模块边界明确，不跨模块直接操作对方 mapper
+- 推荐先做“数据驱动 + 协同过滤”，不做重型算法平台
+- 所有能力优先围绕现有数据库表结构落地
 
 ## 2. 功能结构设计
 
-### 2.1 用户端功能
-
-- 首页
-- 登录与注册
-- 视频详情页
-- 分区页
-- 搜索结果页预留
+### 2.1 用户与认证
+- 注册
+- 登录
+- JWT 鉴权
+- 获取当前用户
+- 用户资料修改
+- 用户设置
 - 用户主页
-- 收藏夹页
-- 消息中心
-- 私信会话页
-- 个人设置页
+- 关注 / 取关
+- 粉丝 / 关注列表
 
-### 2.2 创作者中心
-
-- 创作者首页
-- 投稿管理
-- 视频投稿
+### 2.2 视频内容
+- 视频发布
+- 草稿保存
+- 视频编辑
+- 视频删除 / 下架
+- 视频详情
+- 首页列表
+- 分区列表
+- 用户投稿列表
+- 分P管理
+- 分类标签绑定
 - 合集管理
+- 视频统计查询
 
-### 2.3 管理后台
+### 2.3 互动行为
+- 点赞 / 取消点赞
+- 点踩 / 取消点踩
+- 投币
+- 收藏夹与收藏
+- 稍后再看
+- 评论与回复
+- 评论点赞
+- 弹幕发送与查询
+- 用户行为日志与推荐埋点
 
-- 后台首页
+### 2.4 消息通知
+- 私信会话列表
+- 会话详情
+- 发送消息
+- 会话已读
+- 通知中心
+- 未读数统计
+
+### 2.5 审核管理
 - 视频审核
 - 评论审核
 - 举报处理
+- 封禁 / 禁言
 - 风控日志
-- 分类标签管理预留
 
-### 2.4 推荐相关能力
-
+### 2.6 推荐服务
 - 首页推荐
 - 相关推荐
 - 分区推荐
 - 热门榜
 - 推荐请求记录
 - 推荐结果记录
-- 曝光记录
-- 行为埋点回流
-- ItemCF 相似度中间表
+- 曝光日志
+- 行为事件回流
+- ItemCF 相似视频中间表
 
 ## 3. 系统时序图设计（文本形式）
 
 ### 3.1 用户登录
-
 1. 前端调用 `/api/auth/login`
 2. `AuthController` 接收请求并校验参数
-3. `UserInfoServiceImpl` 校验账号密码
-4. 服务层生成 JWT 并返回登录结果
-5. 前端保存 token，后续请求在 `Authorization` 头中携带
+3. `UserInfoServiceImpl` 校验账号和密码
+4. 服务生成 JWT 并返回用户基础身份信息
+5. 前端保存 token，后续请求通过 `Authorization: Bearer <token>` 访问
 
 ### 3.2 视频发布
-
-1. 创作者前端调用 `/api/videos`
+1. 创作者中心调用 `/api/videos`
 2. `VideoController` 校验登录态和参数
-3. `VideoService` 写入视频主表
-4. `VideoPartService` 写入分 P 信息
-5. `VideoCategory/VideoTag` 关系表落库
+3. `VideoService` 保存视频主记录
+4. `VideoPartService` 保存分P信息
+5. 分类与标签关系落库
 6. 返回视频 ID 和发布结果
 
 ### 3.3 点赞行为
-
 1. 前端调用 `/api/interactions/videos/{videoId}/like`
-2. `VideoInteractionController` 校验用户与视频
-3. `VideoActionServiceImpl` 写入点赞行为
-4. 同步更新视频统计
-5. 发布 `UserBehaviorTrackEvent`
-6. 推荐模块监听事件并写入 `user_behavior_event`
-7. 返回点赞结果
+2. `VideoInteractionController` 校验用户与视频状态
+3. `VideoActionServiceImpl` 写入点赞行为并更新统计
+4. 发布行为事件 `UserBehaviorTrackEvent`
+5. 推荐模块监听后写入 `user_behavior_event`
+6. 返回点赞结果
 
 ### 3.4 首页推荐请求
-
 1. 前端调用 `/api/recommend/home`
 2. `RecommendController` 接收分页参数
 3. `RecommendationServiceImpl` 创建 `recommend_request`
-4. 服务层构建热门、最新、偏好、ItemCF 候选集
-5. 过滤不可见视频并合并打分
+4. 服务构建热门、最新、偏好、ItemCF 候选池
+5. 过滤无效视频并融合打分
 6. 写入 `recommend_result`
 7. 写入 `video_exposure_log`
-8. 返回推荐视频分页结果
+8. 返回推荐视频列表
 
 ### 3.5 审核通过视频
-
 1. 管理员调用 `/api/audit/videos/{auditId}/approve`
 2. `AuditAdminController` 校验管理员权限
-3. `AuditTaskServiceImpl` 更新审核单状态
+3. `AuditTaskServiceImpl` 更新审核记录
 4. 回写视频发布状态
-5. 生成站内通知
+5. 发送站内通知
 6. 作者在通知中心查看审核结果
 
 ## 4. 系统功能模块设计
 
-### 4.1 common
-
+### common
 - 统一响应对象
-- 统一分页对象
+- 分页对象
 - 错误码与全局异常
-- JWT 工具与安全上下文
+- JWT 工具
+- 安全上下文工具
 - OpenAPI 配置
+- MyBatis-Plus 分页配置
 
-### 4.2 auth-module
-
+### auth-module
 - 注册
 - 登录
-- 当前用户获取
+- 当前用户身份获取
 - JWT 生成与解析
 
-### 4.3 user-module
-
+### user-module
 - 用户资料
-- 关注关系
-- 粉丝与关注列表
 - 用户设置
+- 用户主页聚合
+- 关注关系管理
 - 用户统计
 
-### 4.4 video-module
-
+### video-module
 - 视频主数据
 - 草稿与发布状态
-- 视频详情聚合
-- 分 P 管理
+- 分P管理
 - 分类标签绑定
 - 合集管理
-- 视频统计查询
+- 详情聚合与统计查询
+- `VideoFacade` 供其他模块读取公开视频信息
 
-### 4.5 interaction-module
-
-- 点赞 / 点踩
-- 投币
-- 收藏夹与收藏
+### interaction-module
+- 点赞 / 点踩 / 投币
+- 收藏夹 / 收藏
 - 稍后再看
-- 评论与回复
-- 评论点赞
+- 评论 / 回复 / 评论点赞
 - 弹幕
-- 行为埋点事件发布
+- 行为埋点发布
 
-### 4.6 message-module
-
+### message-module
 - 私信会话
-- 发送消息
-- 已读状态
+- 消息发送
+- 会话已读
 - 通知中心
-- 未读数聚合
+- 未读数
 
-### 4.7 audit-module
-
+### audit-module
 - 视频审核
 - 评论审核
 - 举报处理
-- 封禁与禁言
+- 封禁 / 禁言
 - 风控日志
 
-### 4.8 recommend-module
-
+### recommend-module
 - 热门榜
 - 首页推荐
 - 相关推荐
 - 分区推荐
-- 推荐请求与结果追踪
+- 推荐日志
 - 曝光日志
-- 行为事件落库
+- 行为回流
 - ItemCF 相似度重建
-- Kafka 异步预留骨架
+- Kafka 异步骨架预留
 
-### 4.9 web-app
-
+### web-app
 - 聚合所有模块
-- 统一安全配置
-- 统一跨域配置
-- 启动入口
+- 安全配置
+- 跨域配置
+- 统一启动入口
 
 ## 5. E-R 图（文本形式）
 
 ### 5.1 用户域
-
-- `user_info` 1 - 1 `user_profile`
-- `user_info` 1 - 1 `user_setting`
-- `user_info` 1 - 1 `user_stat`
-- `user_info` 1 - n `user_follow`（关注者）
-- `user_info` 1 - n `user_follow`（被关注者）
+- `user_info(1) -> (1) user_profile`
+- `user_info(1) -> (1) user_setting`
+- `user_info(1) -> (1) user_stat`
+- `user_info(1) -> (N) user_follow`（作为关注者）
+- `user_info(1) -> (N) user_follow`（作为被关注者）
 
 ### 5.2 视频域
-
-- `user_info` 1 - n `video`
-- `video` 1 - n `video_part`
-- `video` n - n `category` 通过 `video_category`
-- `video` n - n `tag` 通过 `video_tag`
-- `video_series` 1 - n `video_series_item`
-- `video` 1 - 1 `video_stat`
+- `user_info(1) -> (N) video`
+- `video(1) -> (N) video_part`
+- `video(1) -> (N) video_stat` 或在统计表中聚合
+- `video(N) -> (N) tag` 通过关系表绑定
+- `video(N) -> (1) category`
+- `video_series(1) -> (N) video`
 
 ### 5.3 互动域
-
-- `user_info` 1 - n `video_action`
-- `video` 1 - n `video_action`
-- `video` 1 - n `comment`
-- `comment` 1 - n `comment`（楼中楼回复）
-- `video` 1 - n `danmu`
-- `user_info` 1 - n `favorite_folder`
-- `favorite_folder` 1 - n `favorite_item`
+- `user_info(1) -> (N) video_action`
+- `user_info(1) -> (N) favorite_folder`
+- `favorite_folder(1) -> (N) favorite_item`
+- `video(1) -> (N) comment`
+- `comment(1) -> (N) comment`（楼中楼回复）
+- `video(1) -> (N) danmu`
 
 ### 5.4 消息与审核域
-
-- `message_conversation` 1 - n `message_record`
-- `user_info` 1 - n `notification`
-- `audit_task` 关联 `video` 或 `comment`
-- `report_record` 关联 `video`、`comment` 或 `user`
-- `ban_record` n - 1 `user_info`
-- `risk_control_log` n - 1 `user_info`
+- `conversation(1) -> (N) private_message`
+- `user_info(1) -> (N) notification`
+- `audit_task(N) -> (1) video/comment/report`
+- `ban_record(N) -> (1) user_info`
+- `risk_control_log(N) -> (1) user_info`
 
 ### 5.5 推荐域
-
-- `recommend_request` 1 - n `recommend_result`
-- `recommend_request` 1 - n `video_exposure_log`
-- `user_info` 1 - n `user_behavior_event`
-- `video` 1 - n `recommend_item_similarity`（vid）
-- `video` 1 - n `recommend_item_similarity`（related_vid）
-- `video` 1 - 1 `video_feature_profile`
-- `user_info` 1 - 1 `user_interest_profile`
-- `video` 1 - n `video_play_log`
-- `user_info` 1 - n `search_log`
+- `recommend_request(1) -> (N) recommend_result`
+- `recommend_request(1) -> (N) video_exposure_log`
+- `user_info(1) -> (N) user_behavior_event`
+- `video(1) -> (N) recommend_item_similarity`（vid）
+- `video(1) -> (N) recommend_item_similarity`（related_vid）
+- `user_info(1) -> (1) user_interest_profile`
+- `video(1) -> (1) video_feature_profile`
 
 ## 6. 核心算法实现
 
 ### 6.1 热门榜
-
-热门榜基于视频统计数据计算，优先使用：
-
-- 热度分
+热门榜主要基于视频统计数据进行打分，综合考虑：
 - 播放量
 - 点赞量
 - 评论量
 - 收藏量
+- 投币量
+- 发布时间衰减
 
-排序策略是按热度优先，再按播放量补充稳定排序。
+实现特点：
+- 使用配置化权重
+- 过滤不可见视频
+- 作为首页推荐和分区推荐的兜底候选源
 
 ### 6.2 首页推荐
+分为未登录和已登录两种场景。
 
-未登录用户：
-
+未登录：
 - 热门候选
 - 最新候选
-- 少量兜底候选
+- 少量探索项
 
-已登录用户：
-
-- 热门候选
-- 最新候选
-- 分类偏好候选
-- 标签偏好候选
+已登录：
+- 分类偏好
+- 标签偏好
 - ItemCF 候选
-
-最终通过加权融合得到结果，并做去重、分页、可见性过滤。
+- 热门兜底
 
 ### 6.3 相关推荐
-
-相关推荐以当前视频为中心，召回顺序为：
-
-1. ItemCF 相似视频
-2. 同分类视频
-3. 同标签视频
-4. 热门兜底视频
-
-### 6.4 ItemCF 实现
-
-当前阶段采用轻量 ItemCF：
-
-1. 从 `video_action` 中取当前视频的正向行为用户集合
-2. 找出这些用户也发生过正向行为的其他视频
-3. 按行为类型赋予不同权重
-4. 聚合得到相似视频分数
-5. 将结果写入 `recommend_item_similarity`
-
-正向行为包括：
-
-- 点赞
-- 投币
-- 收藏
-- 稍后再看
-- 评论
-- 弹幕
-
-### 6.5 埋点与异步预留
-
-当前阶段真实生效的是同步写库：
-
-- `recommend_request`
-- `recommend_result`
-- `video_exposure_log`
-- `user_behavior_event`
-
-同时预留 Kafka 异步化骨架，但默认关闭，后续可切换为事件异步消费。
-
-## 7. 遇到的问题和解决方案
-
-### 7.1 MyBatis XML 路径与历史拼写错误
-
-问题：
-
-- 早期 XML 路径和包名存在 `authmoudule` 拼写错误
-- 启动时会导致 Mapper XML 解析失败
-
-解决：
-
-- 修正 XML namespace 和 type
-- 调整 `mapper-locations` 扫描路径
-
-### 7.2 事件监听与事务传播问题
-
-问题：
-
-- `@TransactionalEventListener` 与普通事务注解组合不当，导致启动失败
-
-解决：
-
-- 将监听器事务传播改为 `REQUIRES_NEW`
-- 保证注册后初始化用户扩展数据能稳定提交
-
-### 7.3 分页总数不回填
-
-问题：
-
-- 粉丝/关注分页接口 `records` 正常，但 `total = 0`
-
-解决：
-
-- 增加 MyBatis-Plus 分页拦截器
-
-### 7.4 DTO 字段名与前端传参不一致
-
-问题：
-
-- `sortNo`、`name`、`isPublic`、`favoriteId`、`progressMs` 等字段与后端原 DTO 不一致
-
-解决：
-
-- 在 DTO 中增加兼容映射
-- 减少前后端联调成本
-
-### 7.5 UTF-8 与历史乱码问题
-
-问题：
-
-- 早期源码与文档部分存在历史编码污染
-
-解决：
-
-- 新增要求：所有新增和修改文件统一使用 UTF-8 无 BOM
-- 对关键接口、DTO、文档进行重写与清理
-
-### 7.6 前后端分离联调跨域问题
-
-问题：
-
-- 前端本地开发时浏览器会拦截跨域请求
-
-解决：
-
-- 在 `web-app` 中新增统一跨域配置
-- 允许常见开发阶段的跨域请求、方法、请求头与响应头
-
-## 8. 后续可以做的优化
-
-- 将推荐行为回流改造为 Kafka 异步链路
-- 增加推荐效果分析与点击转化追踪
-- 增加播放开始、播放完成等更细粒度埋点
-- 将 UserCF 作为补充召回策略接入
-- 增加推荐去重与探索机制
-- 引入缓存策略优化热门榜与首页推荐性能
-- 完善后台分类标签管理与搜索页能力
-- 增加定时任务，周期性重建 ItemCF 相似度
-- 增加更细的审核策略和风控规则
-
-## 9. 尚存在的问题和建议方案
-
-### 9.1 部分历史文件仍带乱码注释
-
-现状：
-
-- 个别旧文件的生成器注释仍有乱码，但不影响运行
-
-建议方案：
-
-- 分阶段重写关键模块文件头与注释
-- 优先处理对 Swagger、异常信息、联调体验有影响的文件
-
-### 9.2 推荐算法仍偏轻量
-
-现状：
-
-- 当前推荐更适合课程设计、演示和联调
-
-建议方案：
-
-- 后续引入更细粒度行为权重
-- 加入播放完成率、点击率、停留时长等特征
-
-### 9.3 搜索与后台管理尚未完全收口
-
-现状：
-
-- 搜索页只预留普通结构
-- 分类标签后台能力还需要继续补
-
-建议方案：
-
-- 第八阶段收口 admin-module
-- 前端先按 API 壳与占位结构推进
-
-### 9.4 本地编译依赖环境权限
-
-现状：
-
-- 本地 Maven 插件缓存写权限可能阻塞自动编译验证
-
-建议方案：
-
-- 使用你当前手动编译方式继续作为主验证路径
-- 后续统一整理 Maven 本地仓库权限
+- 当前视频的标签 / 分区相似召回
+- ItemCF 中间表召回
+- 过滤当前视频自身
+- 最终按综合得分排序
+
+### 6.4 ItemCF
+当前实现是简化版离线 ItemCF：
+- 从用户行为中提取 “用户-视频” 偏好关系
+- 根据视频共现情况计算相似度
+- 将结果写入 `recommend_item_similarity`
+- 推荐接口查询时直接读取中间表
+
+### 6.5 埋点与回流
+- 推荐请求写入 `recommend_request`
+- 推荐结果写入 `recommend_result`
+- 曝光写入 `video_exposure_log`
+- 用户互动行为写入 `user_behavior_event`
+- Kafka 目前只保留预留骨架，未启用
+
+## 7. 遇到的问题与解决方案
+
+### 7.1 文档和源码乱码
+问题：部分历史文件编码混乱，出现中文乱码。
+解决：统一按 `UTF-8 无 BOM` 重写关键文件和文档。
+
+### 7.2 MyBatis XML 路径与包名错误
+问题：早期 mapper XML 路径和 namespace 存在拼写错误，导致启动失败。
+解决：修正 XML 路径、namespace 与扫描配置。
+
+### 7.3 分页 total 不回填
+问题：列表接口返回 records 正常但 total 为 0。
+解决：补充 MyBatis-Plus 分页拦截器。
+
+### 7.4 推荐匿名请求写库失败
+问题：匿名用户访问推荐接口时，日志表 `uid` 非空约束导致接口报错。
+解决：匿名请求统一写 `uid = 0`，但推荐逻辑仍按匿名场景处理。
+
+### 7.5 前后端跨域
+问题：前端本地开发跨域。
+解决：由后端统一配置 CORS，在 `web-app` 中集中处理。
+
+### 7.6 视频播放链路只有详情没有真实播放器
+问题：前期只有播放器占位，没有真实播放能力。
+解决：前端视频详情页接入原生 `<video>`，按 `parts[].videoUrl` 播放。
+
+## 8. 后续可做的优化
+
+- 将推荐模块独立为服务，接入 Spring Cloud
+- 启用 Kafka，改造行为事件和曝光日志为异步流处理
+- 接入 Elasticsearch 完善搜索
+- 引入真实的视频播放链路、转码、切片、鉴权
+- 扩展推荐效果分析，如 CTR、完播率、转化率
+- 完成后台统计大盘和分类标签管理的完整功能闭环
+- 引入对象存储与 CDN，替换测试占位视频地址
+
+## 9. 尚存在的问题与建议方案
+
+### 9.1 视频地址仍可能是占位 URL
+现状：前端播放器已接通，但数据库里的视频地址不一定是真实资源。
+建议：后续将上传链路接到 MinIO，并在视频表或分P表中保存真实可访问地址。
+
+### 9.2 Kafka 仅做了预留
+现状：异步事件仍以同步写库为主。
+建议：后续启用 Kafka producer / consumer，优先迁移推荐曝光与行为事件。
+
+### 9.3 推荐算法仍是基础版
+现状：当前只做热门、偏好和 ItemCF。
+建议：后续可扩展 UserCF、召回融合、重排模型和在线特征。
+
+### 9.4 后台部分页面仍偏轻量
+现状：后台已具备核心审核链路，但数据运营与系统管理能力不足。
+建议：后续补后台统计、分类标签实际管理、用户搜索与筛选。

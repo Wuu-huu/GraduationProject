@@ -1,48 +1,109 @@
-# GraduationProject
+# 毕业设计
 
-绫诲摂鍝╁摂鍝╄棰戝钩鍙板悗绔」鐩紝褰撳墠閲囩敤 Spring Boot 澶氭ā鍧楀崟浣撴灦鏋勶紝鎸変笟鍔″煙鎷嗗垎妯″潡锛屽苟涓哄悗缁崌绾у埌 Spring Cloud 棰勭暀娓呮櫚杈圭晫銆?
-## 妯″潡
+一个类哔哩哔哩视频平台的前后端分离毕业设计项目。
 
-- `common`锛氱粺涓€鍝嶅簲銆佸紓甯搞€丣WT銆佸畨鍏ㄣ€佸垎椤点€丱penAPI銆佸叕鍏遍厤缃?- `auth-module`锛氭敞鍐屻€佺櫥褰曘€佸綋鍓嶇敤鎴疯璇佽兘鍔?- `user-module`锛氱敤鎴疯祫鏂欍€佸叧娉ㄥ叧绯汇€佺敤鎴疯缃€佺敤鎴风粺璁?- `video-module`锛氳棰戝彂甯冦€佽崏绋裤€佽鎯呫€佸垎 P銆佸悎闆嗐€佺粺璁?- `interaction-module`锛氱偣璧炪€佹姇甯併€佹敹钘忋€佽瘎璁恒€佸脊骞曘€佺◢鍚庡啀鐪?- `message-module`锛氱淇°€侀€氱煡銆佹湭璇绘暟
-- `audit-module`锛氳棰戝鏍搞€佽瘎璁哄鏍搞€佷妇鎶ュ鐞嗐€佸皝绂佺瑷€銆侀鎺ф棩蹇?- `recommend-module`锛氱儹闂ㄦ銆侀椤垫帹鑽愩€佺浉鍏虫帹鑽愩€佸垎鍖烘帹鑽愩€佹帹鑽愭棩蹇椼€佽涓哄煁鐐广€両temCF 涓棿鑳藉姏
-- `admin-module`锛氬悗鍙板熀纭€绠＄悊鎺ュ彛
-- `web-app`锛氱粺涓€鍚姩鍏ュ彛
+后端采用 `Spring Boot 3 + Maven 多模块`，当前为模块化单体架构；前端采用 `Vue 3 + TypeScript + Vite + Pinia + Element Plus`。项目已经完成认证、用户、视频、互动、消息、审核、推荐以及主要前端页面的联调，并为后续升级到 `Spring Cloud`、`Kafka`、更完整的推荐系统和真实视频播放链路预留了边界。
 
-## 鐜
+## 1. 项目结构
 
+```text
+GraduationProject/
+  common/                 后端公共模块
+  auth-module/            认证与登录
+  user-module/            用户资料、关注、设置
+  video-module/           视频、分P、合集、统计
+  interaction-module/     点赞、投币、收藏、评论、弹幕
+  message-module/         私信、通知、未读数
+  audit-module/           审核、举报、封禁、风控日志
+  recommend-module/       首页推荐、相关推荐、热门榜、埋点
+  admin-module/           后台基础管理能力预留
+  web-app/                后端统一启动模块
+  frontend-app/           Vue 3 前端工程
+  docs/                   项目文档
+  sql/                    演示数据与脚本
+```
+
+## 2. 当前已完成能力
+
+### 后端
+- 用户注册、登录、JWT 鉴权、当前用户获取
+- 用户主页、关注/取关、粉丝/关注列表、个人设置
+- 视频发布、草稿、编辑、删除、详情、列表、分P、合集、统计
+- 点赞、点踩、投币、收藏夹、稍后再看、评论、回复、弹幕
+- 私信会话、消息发送、通知中心、未读数
+- 视频审核、评论审核、举报处理、封禁、禁言、风控日志
+- 首页推荐、相关推荐、分区推荐、热门榜
+- 推荐请求、推荐结果、曝光日志、行为事件、ItemCF 中间表
+- 后端统一处理跨域，支持前后端分离联调
+
+### 前端
+- 用户端：首页、登录、注册、视频详情、分区、搜索
+- 用户中心：个人主页、收藏夹、消息中心、私信会话、设置
+- 创作者中心：创作首页、投稿管理、投稿页、合集管理
+- 管理后台：首页、视频审核、评论审核、举报处理、用户管理、分类标签管理页面壳
+- 推荐结果展示：首页推荐、相关推荐、分区推荐、热门榜
+- 原生 `<video>` 播放器已接入视频详情页，支持分P切换
+
+## 3. 关键技术栈
+
+### 后端
 - JDK 17
-- Maven 3.9+
+- Spring Boot 3.x
+- Spring Security + JWT
+- MyBatis-Plus
 - MySQL 8
 - Redis
 - MinIO
+- OpenAPI / Swagger
+- Maven 多模块
 
-## 鍚姩
+### 前端
+- Vue 3
+- TypeScript
+- Vite
+- Pinia
+- Vue Router
+- Axios
+- Element Plus
+- SCSS / scoped style
 
-1. 鍒濆鍖栦笟鍔℃暟鎹簱锛屽苟鎵ц鎺ㄨ崘妯″潡鐩稿叧寤鸿〃璇彞銆?2. 濡傞渶婕旂ず鏁版嵁锛屽彲鎵ц [sql/stage8_demo_seed.sql](/E:/GraduationProject/GraduationProject/sql/stage8_demo_seed.sql)銆?3. 淇敼 [application.yml](/E:/GraduationProject/GraduationProject/web-app/src/main/resources/application.yml) 涓殑鏁版嵁搴撱€丷edis銆丮inIO 閰嶇疆銆?4. 缂栬瘧骞跺惎鍔?`web-app`銆?
-## 褰撳墠瀹屾垚闃舵
+## 4. 启动方式
 
-- 绗?1 闃舵锛氭柟妗堜笌楠ㄦ灦璁捐
-- 绗?2 闃舵锛氬熀纭€宸ョ▼鎼缓
-- 绗?3 闃舵锛氳璇佷笌鐢ㄦ埛鍩?- 绗?4 闃舵锛氳棰戝煙
-- 绗?5 闃舵锛氫簰鍔ㄥ煙
-- 绗?6 闃舵锛氭秷鎭笌瀹℃牳鍩?- 绗?7 闃舵锛氭帹鑽愭ā鍧楀熀纭€鑳藉姏涓庡煁鐐归棴鐜?
-## 鎺ㄨ崘妯″潡璇存槑
+### 后端
+1. 准备 `MySQL 8`、`Redis`、`MinIO`
+2. 执行演示数据脚本：[`sql/stage8_demo_seed.sql`](/E:/GraduationProject/GraduationProject/sql/stage8_demo_seed.sql)
+3. 配置 [`web-app/src/main/resources/application.yml`](/E:/GraduationProject/GraduationProject/web-app/src/main/resources/application.yml)
+4. 启动 `web-app`
 
-褰撳墠闃舵宸插畬鎴愶細
+### 前端
+1. 进入 [`frontend-app`](/E:/GraduationProject/GraduationProject/frontend-app)
+2. 执行 `npm install`
+3. 执行 `npm run dev`
+4. 默认通过 `.env.development` 访问后端接口
 
-- 鏁版嵁椹卞姩鎺ㄨ崘
-- 鐑棬姒?- 棣栭〉鎺ㄨ崘
-- 鐩稿叧鎺ㄨ崘
-- 鍒嗗尯鎺ㄨ崘
-- `recommend_request` / `recommend_result` 璁板綍
-- `video_exposure_log` 鏇濆厜璁板綍
-- 浜掑姩鎴愬姛鍚庣殑 `user_behavior_event` 鍚屾钀藉簱
-- `recommend_item_similarity` ItemCF 涓棿琛ㄨ兘鍔?
-褰撳墠浠呴鐣欍€佷笉鍚敤锛?
-- Kafka 寮傛鐢熶骇涓庢秷璐归鏋?- 鏇村鏉傜殑鍦ㄧ嚎鐗瑰緛鏈嶅姟
-- UserCF銆佸悜閲忓彫鍥炪€佹繁搴﹀涔犳帓搴?
-## 浜や粯鏉愭枡
+## 5. 当前联调状态
 
-- [绗叓闃舵浜や粯璇存槑](/E:/GraduationProject/GraduationProject/docs/stage8-delivery.md)
-- [鍓嶇鑱旇皟璇存槑](/E:/GraduationProject/GraduationProject/docs/frontend-integration.md)
-- [婕旂ず鏁版嵁鑴氭湰](/E:/GraduationProject/GraduationProject/sql/stage8_demo_seed.sql)
+已确认可联调的核心链路包括：
+- 登录 / 注册 / 获取当前用户
+- 首页视频流 / 热门榜 / 推荐流
+- 视频详情 / 相关推荐 / 评论 / 弹幕 / 点赞投币收藏
+- 用户主页 / 关注关系 / 用户投稿
+- 收藏夹 / 消息中心 / 私信会话
+- 创作者投稿与合集管理
+- 后台审核与举报处理
+- 推荐日志、曝光日志、行为埋点落库
+
+## 6. 当前已知限制
+
+- 数据库中的视频地址如果仍是占位 URL，则前端播放器只能展示播放器，无法真实播放
+- 部分后台页面目前完成了页面和联调壳，但后台统计能力仍可继续扩展
+- Kafka 仅做了预留设计与文档说明，当前未启用
+- 推荐系统当前只实现“数据驱动 + ItemCF”，未接入 ES、向量检索、深度学习排序
+
+## 7. 文档索引
+
+- [`docs/system-summary.md`](/E:/GraduationProject/GraduationProject/docs/system-summary.md)：系统概要、模块设计、时序、E-R、算法、问题总结
+- [`docs/frontend-integration.md`](/E:/GraduationProject/GraduationProject/docs/frontend-integration.md)：前端工程结构与联调说明
+- [`docs/frontend-backend-contract.md`](/E:/GraduationProject/GraduationProject/docs/frontend-backend-contract.md)：前后端接口契约与字段约定
+- [`docs/stage8-delivery.md`](/E:/GraduationProject/GraduationProject/docs/stage8-delivery.md)：当前阶段交付总结
+- [`docs/project-upgrade-guide.md`](/E:/GraduationProject/GraduationProject/docs/project-upgrade-guide.md)：后续升级路线与建议

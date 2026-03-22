@@ -1,6 +1,6 @@
-# 前端联调说明
+# 前端工程与联调说明
 
-## 技术栈约束
+## 1. 前端技术栈
 
 - Vue 3
 - TypeScript
@@ -11,249 +11,141 @@
 - Element Plus
 - SCSS / scoped style
 
-## 推荐的目录结构
+## 2. 前端目录结构
 
 ```text
-src/
-  layouts/
-  router/
-  stores/
-  api/
-  views/
-    home/
-    auth/
-    video/
-    category/
-    search/
-    user/
-    favorite/
-    message/
-    creator/
-    admin/
-  components/
-  types/
-  utils/
-  assets/
-  styles/
+frontend-app/
+  src/
+    api/
+    assets/
+    components/
+    layouts/
+    router/
+    stores/
+    styles/
+    types/
+    utils/
+    views/
+      home/
+      auth/
+      video/
+      category/
+      search/
+      user/
+      favorite/
+      message/
+      creator/
+      admin/
 ```
 
-## Pinia Store 建议
-
-- `userStore`：登录态、当前用户、权限
-- `appStore`：全局加载状态、导航状态、主题和通用配置
-- `videoStore`：视频详情、视频列表、投稿状态
-- `messageStore`：会话、通知、未读数
-- `categoryStore`：分区、标签、筛选条件
-- `recommendStore`：首页推荐、相关推荐、分区推荐、热门榜
-
-## 统一响应结构
-
-```ts
-interface ApiResponse<T> {
-  code: number
-  message: string
-  data: T
-}
-
-interface PageResponse<T> {
-  records: T[]
-  total: number
-  pageNum: number
-  pageSize: number
-}
-```
-
-## 推荐接口
-
-### `src/api/recommend.ts`
-
-```ts
-export interface RecommendQuery {
-  pageNum?: number
-  pageSize?: number
-}
-
-export interface RecommendVideoVO {
-  vid: number
-  title: string
-  subtitle: string | null
-  coverUrl: string
-  durationSec: number | null
-  authorUid: number
-  authorName: string
-  authorAvatarUrl: string | null
-  playCount: number | null
-  likeCount: number | null
-  commentCount: number | null
-  favoriteCount: number | null
-  publishTime: string | null
-  source: 'HOT' | 'LATEST' | 'CATEGORY_PREF' | 'TAG_PREF' | 'ITEM_CF' | 'ZONE_HOT' | 'FALLBACK'
-  score: number | null
-  positionNo: number
-}
-```
-
-建议封装：
-
-- `getHomeRecommend(params)` -> `GET /api/recommend/home`
-- `getRelatedRecommend(videoId, params)` -> `GET /api/recommend/videos/{videoId}/related`
-- `getZoneRecommend(zoneId, params)` -> `GET /api/recommend/zones/{zoneId}`
-- `getHotRecommend(params)` -> `GET /api/recommend/hot`
-
-## 其他 API 文件建议
-
-- `src/api/auth.ts`
-- `src/api/user.ts`
-- `src/api/video.ts`
-- `src/api/comment.ts`
-- `src/api/favorite.ts`
-- `src/api/message.ts`
-- `src/api/admin.ts`
-- `src/api/recommend.ts`
-
-## 页面到接口映射建议
+## 3. 路由与页面
 
 ### 用户端
-
 - 首页
-  - `/api/recommend/home`
-  - `/api/recommend/hot`
-  - `/api/videos`
+- 登录页
+- 注册页
 - 视频详情页
-  - `/api/videos/{videoId}`
-  - `/api/recommend/videos/{videoId}/related`
-  - `/api/videos/{videoId}/comments`
-  - `/api/videos/{videoId}/danmakus`
-  - `/api/interactions/videos/{videoId}/state`
 - 分区页
-  - `/api/videos/zone/{zoneId}`
-  - `/api/recommend/zones/{zoneId}`
+- 搜索结果页
 - 用户主页
-  - `/api/users/{uid}/profile`
-  - `/api/users/{uid}/videos`
 - 收藏夹页
-  - `/api/favorites`
-  - `/api/favorites/{favoriteId}`
-- 消息中心
-  - `/api/messages/conversations`
-  - `/api/messages/notifications`
-  - `/api/messages/unread-count`
+- 消息中心页
+- 私信会话页
+- 个人设置页
 
 ### 创作者中心
-
-- 投稿管理
-  - `/api/users/{uid}/videos`
-  - `/api/videos`
-  - `/api/videos/drafts`
-  - `/api/videos/{videoId}`
+- 创作者首页
+- 投稿管理页
 - 视频投稿页
-  - `/api/videos`
-  - `/api/videos/{videoId}/parts`
-  - `/api/videos/{videoId}/category-tags`
-- 合集管理
-  - `/api/video-series`
-  - `/api/video-series/{seriesId}`
-  - `/api/video-series/{seriesId}/videos`
+- 合集管理页
 
 ### 管理后台
+- 后台首页
+- 用户管理页
+- 视频审核页
+- 评论审核页
+- 举报处理页
+- 分类标签管理页
 
-- 视频审核
-  - `/api/audit/videos`
-- 评论管理
-  - `/api/audit/comments`
-- 举报处理
-  - `/api/audit/reports`
-- 风控日志
-  - `/api/audit/risk-logs`
-- 推荐调试
-  - `/api/recommend/admin/itemcf/{videoId}/rebuild`
+## 4. Pinia Store 设计
 
-## 公开访问与权限建议
+- `userStore`：token、当前用户、登录态
+- `appStore`：全局 loading、布局状态
+- `videoStore`：视频详情、列表、分页状态
+- `messageStore`：会话、通知、未读数
+- `categoryStore`：分区与筛选状态
+- `recommendStore`：推荐流、热门榜、相关推荐
 
-### 匿名可访问
+## 5. 当前前端实现重点
 
-- `/`
-- `/login`
-- `/register`
-- `/videos/:videoId`
-- `/zones/:zoneId`
-- 首页推荐、热门榜、相关推荐、分区推荐
-- 评论列表、回复列表
+### 5.1 首页
+- 信息结构参考 B 站首页
+- 焦点推荐区 + 分区导航 + 内容筛选 + 热门榜
+- 支持“推荐 / 热门 / 最新”切换
+- 可通过按钮跳转到带筛选参数的搜索结果页
 
-### 登录后访问
+### 5.2 视频详情页
+- 左侧播放器主内容区
+- 标题、简介、互动区
+- 分P切换
+- 右侧作者卡与相关推荐
+- 下方评论区与弹幕输入
+- 已接入原生 `<video>` 播放器
 
-- 点赞、投币、收藏、评论、弹幕
-- 个人设置
-- 收藏夹
-- 私信与通知
-- 创作者中心
+### 5.3 用户中心
+- 个人主页使用顶部资料区 + 统计卡 + 投稿流结构
+- 设置页使用分组配置卡片布局
+- 收藏夹页为左侧列表、右侧详情结构
+- 消息中心为会话与通知双栏布局
 
-### 管理员访问
+### 5.4 创作者中心
+- 创作首页
+- 投稿管理
+- 投稿页
+- 合集管理
 
-- 审核后台
-- 举报处理
-- 风控日志
-- ItemCF 重建接口
+### 5.5 管理后台
+- 页面壳与核心审核联调已接通
+- 风格统一到与前台一致的卡片布局语言
 
-## 组件拆分建议
+## 6. 联调配置
 
-- `components/layout/AppHeader.vue`
-- `components/category/CategoryNav.vue`
-- `components/video/VideoCard.vue`
-- `components/video/VideoList.vue`
-- `components/recommend/RecommendVideoList.vue`
-- `components/recommend/HotRankPanel.vue`
-- `components/video/AuthorCard.vue`
-- `components/comment/CommentList.vue`
-- `components/comment/CommentInput.vue`
-- `components/common/EmptyState.vue`
-- `components/common/AppPagination.vue`
-- `components/upload/UploadArea.vue`
-- `components/form/TagInput.vue`
-- `components/common/PageFilterBar.vue`
+### 6.1 环境变量
+前端通过 `.env.development` 和 `.env.production` 管理后端地址。
 
-## 路由建议
+### 6.2 Axios 封装
+统一入口：[`frontend-app/src/api/request.ts`](/E:/GraduationProject/GraduationProject/frontend-app/src/api/request.ts)
 
-- `/`
-- `/login`
-- `/register`
-- `/videos/:videoId`
-- `/zones/:zoneId`
-- `/search`
-- `/users/:uid`
-- `/favorites`
-- `/messages`
-- `/messages/conversations/:conversationId`
-- `/settings`
-- `/creator`
-- `/creator/videos`
-- `/creator/upload`
-- `/creator/series`
-- `/admin`
-- `/admin/audit/videos`
-- `/admin/audit/comments`
-- `/admin/reports`
-- `/admin/categories`
+能力包括：
+- 自动注入 token
+- 统一响应解包
+- 登录失效处理
+- 统一错误提示
 
-## Axios 封装建议
+### 6.3 路由守卫
+路由守卫位于：[`frontend-app/src/router/guard.ts`](/E:/GraduationProject/GraduationProject/frontend-app/src/router/guard.ts)
 
-- 统一处理 `code`
-- `20000` 视为未登录或登录过期，跳转登录页
-- `10001` 视为业务错误，直接用 Element Plus 消息提示
-- token 使用 `Authorization: Bearer <token>`
+当前已实现：
+- 未登录拦截受保护页面
+- 已登录访问登录 / 注册页时重定向
+- 创作者权限校验
+- 管理员权限校验
 
-## 可先用 mock 占位的页面
+## 7. 当前前端与后端的关键联调结论
 
-- 搜索结果页
-- 创作者中心概览统计
-- 管理后台分类标签管理
+已联调通过的主要场景：
+- 登录 / 注册 / 当前用户
+- 首页视频流 / 推荐流 / 热门榜
+- 视频详情 / 评论 / 弹幕 / 相关推荐 / 视频播放字段获取
+- 用户主页 / 投稿列表 / 关注关系
+- 收藏夹 / 消息中心 / 私信会话
+- 创作者投稿、草稿、合集
+- 后台审核与举报处理
 
-这些页面可以先保留 API 封装和页面结构，等后续模块进一步补齐后再接实数。
+## 8. 前端后续升级建议
 
-## 联调时可直接复用的字段兼容说明
-
-- 视频分 P 请求兼容 `sortNo -> partNo`
-- 收藏夹创建兼容 `name -> title`
-- 收藏夹公开状态兼容 `isPublic -> visible`
-- 收藏行为兼容 `favoriteId -> favoriteFolderId`
-- 弹幕发送兼容 `progressMs -> timePointMs`
+- 将视频真实上传和真实播放地址接入 MinIO
+- 补搜索结果真实搜索逻辑
+- 补后台统计与分类标签完整操作页
+- 为推荐列表加入曝光上报与点击上报的显式前端埋点
+- 根据正式业务决定是否做移动端适配

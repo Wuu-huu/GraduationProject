@@ -1,43 +1,70 @@
-# 绗叓闃舵浜や粯璇存槑
+# 当前阶段交付说明
 
-## 褰撳墠鍚庣鍙氦浠樺唴瀹?
-### 璁よ瘉涓庣敤鎴?
-- 娉ㄥ唽銆佺櫥褰曘€佽幏鍙栧綋鍓嶇敤鎴?- 鐢ㄦ埛璧勬枡鏌ヨ涓庣紪杈?- 鐢ㄦ埛璁剧疆鏌ヨ涓庣紪杈?- 鍏虫敞銆佸彇鍏炽€佺矇涓濆垪琛ㄣ€佸叧娉ㄥ垪琛?
-### 瑙嗛涓庝簰鍔?
-- 瑙嗛鍙戝竷銆佽崏绋夸繚瀛樸€佺紪杈戙€佸垹闄?- 瑙嗛璇︽儏銆侀椤靛垪琛ㄣ€佸垎鍖哄垪琛ㄣ€佺敤鎴锋姇绋垮垪琛?- 鍒?P 绠＄悊銆佸悎闆嗙鐞嗐€佽棰戠粺璁℃煡璇?- 鐐硅禐銆佺偣韪┿€佹姇甯併€佹敹钘忋€佺◢鍚庡啀鐪?- 璇勮銆佸洖澶嶃€佽瘎璁虹偣璧?- 寮瑰箷鍙戦€佷笌鏌ヨ
+## 1. 交付范围
 
-### 娑堟伅涓庡鏍?
-- 绉佷俊浼氳瘽鍒涘缓銆佷細璇濆垪琛ㄣ€佹秷鎭彂閫併€佸凡璇绘洿鏂?- 閫氱煡鍒楄〃銆佹湭璇绘暟
-- 瑙嗛瀹℃牳銆佽瘎璁哄鏍搞€佷妇鎶ュ鐞?- 灏佺銆佺瑷€銆侀鎺ф棩蹇?
-### 鎺ㄨ崘
+### 后端交付
+- 阶段 1：方案与骨架设计
+- 阶段 2：基础工程、JWT、安全、统一返回、异常、Swagger
+- 阶段 3：认证与用户模块
+- 阶段 4：视频模块
+- 阶段 5：互动模块
+- 阶段 6：消息与审核模块
+- 阶段 7：推荐模块
+- 阶段 8：文档整理、演示脚本、跨域处理、联调收尾
 
-- `GET /api/recommend/home`
-- `GET /api/recommend/videos/{videoId}/related`
-- `GET /api/recommend/zones/{zoneId}`
-- `GET /api/recommend/hot`
-- `POST /api/recommend/admin/itemcf/{videoId}/rebuild`
+### 前端交付
+- 阶段 1：结构设计
+- 阶段 2：基础工程骨架
+- 阶段 3：用户端核心页面
+- 阶段 4：用户中心与消息页面
+- 阶段 5：创作者中心
+- 阶段 6：管理后台页面
+- 阶段 7：统一优化、中文化、路由守卫、视觉收口
 
-## 鎺ㄨ崘閾捐矾璇存槑
+## 2. 当前可演示能力
 
-- 鎺ㄨ崘鎺ュ彛浼氬啓鍏?`recommend_request`
-- 鎺ㄨ崘缁撴灉浼氬啓鍏?`recommend_result`
-- 杩斿洖缁撴灉鍚屾椂鍐欏叆 `video_exposure_log`
-- 鐐硅禐銆佹姇甯併€佹敹钘忋€佽瘎璁恒€佸洖澶嶃€佺◢鍚庡啀鐪嬨€佸脊骞曟垚鍔熷悗浼氬彂甯?`UserBehaviorTrackEvent`
-- 鎺ㄨ崘妯″潡鐩戝惉浜嬩欢骞跺啓鍏?`user_behavior_event`
-- `recommend_item_similarity` 鐢ㄤ簬淇濆瓨 ItemCF 鐩镐技瑙嗛缁撴灉
-- Kafka 浠ｇ爜鍙仛棰勭暀锛屽綋鍓嶉粯璁ゅ叧闂?
-## 鍚姩姝ラ
+- 用户注册、登录与登录态保持
+- 首页推荐、热门榜、首页公开视频流
+- 视频详情、评论、弹幕、互动操作
+- 用户主页、收藏夹、消息中心、私信会话
+- 创作者投稿、草稿、分P、合集管理
+- 后台审核、举报处理、封禁禁言
+- 推荐日志、曝光日志、行为日志与 ItemCF 中间表
+- 视频详情页基于 `videoUrl` 的播放器接入
 
-1. 纭繚 MySQL銆丷edis銆丮inIO 鍙敤銆?2. 鎵ц鎺ㄨ崘妯″潡寤鸿〃璇彞鍜?[sql/stage8_demo_seed.sql](/E:/GraduationProject/GraduationProject/sql/stage8_demo_seed.sql)銆?3. 閰嶇疆 [application.yml](/E:/GraduationProject/GraduationProject/web-app/src/main/resources/application.yml)銆?4. 鍚姩 `web-app`銆?
-## 鍩虹鍥炲綊寤鸿
+## 3. 跨域与联调
 
-1. 鏈櫥褰曡闂椤垫帹鑽愩€佺儹闂ㄦ銆佺浉鍏虫帹鑽愩€佸垎鍖烘帹鑽愩€?2. 鐧诲綍鍚庡畬鎴愮偣璧炪€佹姇甯併€佹敹钘忋€佽瘎璁恒€佸脊骞曠瓑浜掑姩銆?3. 鍐嶆璁块棶鎺ㄨ崘鎺ュ彛锛岃瀵熺粨鏋滃拰鍩嬬偣琛ㄦ槸鍚︿骇鐢熻褰曘€?4. 璋冪敤 ItemCF 閲嶅缓鎺ュ彛锛屾鏌?`recommend_item_similarity` 鏄惁鍐欏叆銆?5. 妫€鏌?`recommend_request`銆乣recommend_result`銆乣video_exposure_log`銆乣user_behavior_event` 鏄惁瀛樺湪瀵瑰簲鏁版嵁銆?
-## 娈嬩綑椋庨櫓
+跨域由后端统一解决，关键配置位于：
+- [`web-app/src/main/java/com/zzk/webapp/config/CorsConfig.java`](/E:/GraduationProject/GraduationProject/web-app/src/main/java/com/zzk/webapp/config/CorsConfig.java)
+- [`web-app/src/main/java/com/zzk/webapp/config/SecurityConfig.java`](/E:/GraduationProject/GraduationProject/web-app/src/main/java/com/zzk/webapp/config/SecurityConfig.java)
 
-- 褰撳墠 ItemCF 鏄交閲忓疄鐜帮紝閫傚悎鑱旇皟涓庢紨绀猴紝涓嶉€傚悎鐩存帴浣滀负鏈€缁堢敓浜ф帹鑽愮畻娉曘€?- Kafka 棰勭暀浠ｇ爜灏氭湭鎺ュ叆鐪熷疄 broker锛屼篃娌℃湁鍚敤寮傛娑堣垂銆?- 鎺ㄨ崘铻嶅悎鍒嗘暟鏄厤缃寲鐨勭畝鍗曞姞鏉冿紝鍚庣画浠嶉渶缁撳悎鐪熷疄鍩嬬偣鏁版嵁缁х画璋冩潈銆?- 鎼滅储椤靛綋鍓嶄粎淇濈暀鏅€氱粨鏋勯〉棰勬湡锛屼笉鍖呭惈 Elasticsearch 鎼滅储鑳藉姏銆
+当前前端本地开发地址可直接与后端联调，不必在前端额外做代理才能访问接口。
 
-## 配套文档
+## 4. 演示数据
 
-- [系统总结文档](/E:/GraduationProject/GraduationProject/docs/system-summary.md)
-- [前端联调说明](/E:/GraduationProject/GraduationProject/docs/frontend-integration.md)
-- [前端所需后端能力清单](/E:/GraduationProject/GraduationProject/docs/frontend-backend-contract.md)
+演示数据脚本：[`sql/stage8_demo_seed.sql`](/E:/GraduationProject/GraduationProject/sql/stage8_demo_seed.sql)
+
+推荐相关新增表包括：
+- `recommend_request`
+- `recommend_result`
+- `video_exposure_log`
+- `user_behavior_event`
+- `video_feature_profile`
+- `user_interest_profile`
+- `video_play_log`
+- `search_log`
+- `recommend_item_similarity`
+
+## 5. 当前残留问题
+
+- 如果 `videoUrl` 是占位地址，视频无法真实播放
+- 后台部分能力目前偏轻量，更侧重审核链路演示
+- 推荐系统已可用，但仍是基础版策略
+- Kafka 仅做预留，未实际启用
+
+## 6. 建议后续接手顺序
+
+1. 先阅读 [`docs/system-summary.md`](/E:/GraduationProject/GraduationProject/docs/system-summary.md)
+2. 再阅读 [`docs/frontend-backend-contract.md`](/E:/GraduationProject/GraduationProject/docs/frontend-backend-contract.md)
+3. 然后阅读 [`docs/frontend-integration.md`](/E:/GraduationProject/GraduationProject/docs/frontend-integration.md)
+4. 最后参考 [`docs/project-upgrade-guide.md`](/E:/GraduationProject/GraduationProject/docs/project-upgrade-guide.md) 制定升级计划
